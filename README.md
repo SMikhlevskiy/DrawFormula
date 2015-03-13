@@ -1,3 +1,3 @@
 # FormulaDraw
-Calckulate and Buld Graphic for user's formula
+Calckulate user's formula and draw graphic 
 by Reverse Polish Notation(RPN)  
