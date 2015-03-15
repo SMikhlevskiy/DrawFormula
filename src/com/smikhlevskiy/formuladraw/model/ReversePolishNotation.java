@@ -232,30 +232,29 @@ public class ReversePolishNotation {
 		if (lexPolish == null)
 			return 0;
 
-		ArrayList<Double> valStack = new ArrayList();
+		ArrayList<Double> valueStack = new ArrayList();
 
 		for (int i = 0; i < lexPolish.size(); i++) {
 
 			if (lexPolish.get(i).typ == TypeLex.DIGITAL) {
-				valStack.add(new Double(lexPolish.get(i).value));
+				valueStack.add(new Double(lexPolish.get(i).value));
 				continue;
 			}
 			if (lexPolish.get(i).typ == TypeLex.FUNCTION) {
 
 				switch (lexPolish.get(i).typeFunction) {
 				case SIN:
-					valStack.set(valStack.size() - 1, Math.sin(valStack.get(valStack.size() - 1)));
+					valueStack.set(valueStack.size() - 1, Math.sin(valueStack.get(valueStack.size() - 1)));
 					break;
 				case COS:
-					valStack.set(valStack.size() - 1, Math.cos(valStack.get(valStack.size() - 1)));
+					valueStack.set(valueStack.size() - 1, Math.cos(valueStack.get(valueStack.size() - 1)));
 
 					break;
 				case XVALUE:
-					valStack.add(new Double(x));
-					continue;				
-					
+					valueStack.add(new Double(x));
+					continue;
 
-				default:					
+				default:
 					break;// eeror
 				}
 			}
@@ -263,34 +262,34 @@ public class ReversePolishNotation {
 			if (lexPolish.get(i).typ == TypeLex.OPERATOR) {
 				switch (lexPolish.get(i).operator) {
 				case '/':
-					valStack.set(valStack.size() - 2,
-							new Double(valStack.get(valStack.size() - 2) / valStack.get(valStack.size() - 1)));
+					valueStack.set(valueStack.size() - 2,
+							new Double(valueStack.get(valueStack.size() - 2) / valueStack.get(valueStack.size() - 1)));
 
 					break;
 				case '*':
-					valStack.set(valStack.size() - 2,
-							new Double(valStack.get(valStack.size() - 2) * valStack.get(valStack.size() - 1)));
+					valueStack.set(valueStack.size() - 2,
+							new Double(valueStack.get(valueStack.size() - 2) * valueStack.get(valueStack.size() - 1)));
 					break;
 				case '+':
-					valStack.set(valStack.size() - 2,
-							new Double(valStack.get(valStack.size() - 2) + valStack.get(valStack.size() - 1)));
+					valueStack.set(valueStack.size() - 2,
+							new Double(valueStack.get(valueStack.size() - 2) + valueStack.get(valueStack.size() - 1)));
 					break;
 				case '-':
-					valStack.set(valStack.size() - 2,
-							new Double(valStack.get(valStack.size() - 2) - valStack.get(valStack.size() - 1)));
+					valueStack.set(valueStack.size() - 2,
+							new Double(valueStack.get(valueStack.size() - 2) - valueStack.get(valueStack.size() - 1)));
 					break;
 
 				default:
 					break;
 
 				}
-				valStack.remove(valStack.size() - 1);
+				valueStack.remove(valueStack.size() - 1);
 				continue;
 			}
 
 		}
-		if (valStack.size() > 0)
-			return valStack.get(valStack.size() - 1);
+		if (valueStack.size() > 0)
+			return valueStack.get(valueStack.size() - 1);
 
 		return 0;// error
 

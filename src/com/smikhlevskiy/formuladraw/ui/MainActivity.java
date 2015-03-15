@@ -65,6 +65,7 @@ public class MainActivity extends ActionBarActivity {
 						.toString(), xVal)).toString());
 
 				// functionDrawCore.compileFormula(editTextFunction.getText().toString());
+//				controller api
 			}
 
 		});

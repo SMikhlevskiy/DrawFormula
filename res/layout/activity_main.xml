@@ -88,7 +88,7 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="10dp"
             android:ems="10"
-            android:text="0" >
+            android:text="-10" >
         </EditText>
 
         <TextView
@@ -109,7 +109,8 @@
 
     <com.smikhlevskiy.formuladraw.ui.GraphicView
         android:id="@+id/graphicView"
-        android:layout_width="300dp"
+        android:layout_marginRight="10dp"
+        android:layout_width="match_parent"
         android:layout_height="300dp"
         android:layout_marginLeft="10dp" >
     </com.smikhlevskiy.formuladraw.ui.GraphicView>
