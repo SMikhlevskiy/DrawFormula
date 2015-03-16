@@ -1,6 +1,7 @@
 package com.smikhlevskiy.formuladraw.ui;
 
 import com.smikhlevskiy.formuladraw.entity.FormulaDrawCore;
+import com.smikhlevskiy.formuladraw.model.FindRoot;
 import com.smikhlevskiy.functiondraw.R;
 
 import android.content.Intent;
@@ -17,6 +18,7 @@ import android.widget.TextView;
 public class MainActivity extends ActionBarActivity {
 	private Button buttonCalck;
 	private Button buttonDraw;
+	private Button buttonRoot;
 	private EditText editTextFunction;
 	private EditText editTextX;
 	private EditText editTextXStart;
@@ -35,6 +37,7 @@ public class MainActivity extends ActionBarActivity {
 
 		buttonCalck = (Button) findViewById(R.id.buttonCalck);
 		buttonDraw = (Button) findViewById(R.id.buttonDraw);
+		buttonRoot = (Button) findViewById(R.id.buttonRoot);
 
 		editTextFunction = (EditText) findViewById(R.id.editTextFormula);
 		textViewResult = (TextView) findViewById(R.id.textViewResult);
@@ -42,6 +45,17 @@ public class MainActivity extends ActionBarActivity {
 		editTextXStart = (EditText) findViewById(R.id.editTextXstart);
 		editTextXEnd = (EditText) findViewById(R.id.editTextXend);
 		graphicView = (GraphicView) findViewById(R.id.graphicView);
+		
+
+		buttonRoot.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				FindRoot findRoot = new FindRoot(getApplicationContext(),editTextFunction.getText().toString(),new Double(
+						editTextXStart.getText().toString()), new Double(editTextXEnd.getText().toString()),(double)0.01); 
+				
+			}
+			});
+			
 		
 		// --------------------------------------------
 		buttonDraw.setOnClickListener(new OnClickListener() {

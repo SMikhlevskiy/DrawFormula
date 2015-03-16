@@ -109,10 +109,30 @@
 
     <com.smikhlevskiy.formuladraw.ui.GraphicView
         android:id="@+id/graphicView"
-        android:layout_marginRight="10dp"
         android:layout_width="match_parent"
         android:layout_height="300dp"
-        android:layout_marginLeft="10dp" >
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp" >
     </com.smikhlevskiy.formuladraw.ui.GraphicView>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal" >
+
+        <Button
+            android:id="@+id/buttonRoot"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:text="Корень" />
+		<Button
+            android:id="@+id/buttonRegistration"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="1dp"
+            android:text="Регистрация" />        
+    </LinearLayout>
+    
 
 </LinearLayout>

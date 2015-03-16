@@ -7,14 +7,19 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.util.AttributeSet;
+import android.view.MotionEvent;
 import android.view.View;
+import android.widget.Toast;
 
 public class GraphicView extends View {
+
 	private ReversePolishNotation reversePolishNotation = null;
 	private Double xMin = 0.0;
 	private Double xMax = 0.0;
 	private Double yMin = 0.0;
 	private Double yMax = 0.0;
+	private float xTouchOld = 0;
+	private float yTouchOld = 0;
 
 	private boolean drawCustomCanvas = false;
 
@@ -71,8 +76,6 @@ public class GraphicView extends View {
 		yMax = yMax + 0.1 * (yMax - yMin);
 		yMin = yMin - 0.1 * (yMax - yMin);
 
-		
-
 	}
 
 	public void setDrawCustomCanvas(boolean drawCustomCanvas) {
@@ -88,24 +91,24 @@ public class GraphicView extends View {
 		}
 
 		Paint mPaint = new Paint();
-		/* 
-		mPaint.setColor(Color.rgb(150, 150, 150));
-		canvas.drawRect(1,1,getWidth()-1,getHeight()-1,mPaint);
-		*/
-		mPaint.setColor(Color.rgb(0, 0, 0));		
-		canvas.drawLine(1,1,getWidth()-1,1,mPaint);
-		canvas.drawLine(getWidth()-1,getHeight()-1,getWidth()-1,1,mPaint);
-		canvas.drawLine(getWidth()-1,getHeight()-1,1,getHeight()-1,mPaint);
-		canvas.drawLine(0,0,0,getHeight()-1,mPaint);
-		
+		/*
+		 * mPaint.setColor(Color.rgb(150, 150, 150));
+		 * canvas.drawRect(1,1,getWidth()-1,getHeight()-1,mPaint);
+		 */
+		mPaint.setColor(Color.rgb(0, 0, 0));
+		canvas.drawLine(1, 1, getWidth() - 1, 1, mPaint);
+		canvas.drawLine(getWidth() - 1, getHeight() - 1, getWidth() - 1, 1, mPaint);
+		canvas.drawLine(getWidth() - 1, getHeight() - 1, 1, getHeight() - 1, mPaint);
+		canvas.drawLine(0, 0, 0, getHeight() - 1, mPaint);
+
 		mPaint.setColor(Color.rgb(100, 100, 100));
 		mPaint.setStrokeWidth(3);
-		
-		double yi0 = 1.0 * this.getHeight() - 1.0 * (0-yMin) * this.getHeight() / (yMax - yMin);
-		canvas.drawLine(0, (float)yi0, getWidth(), (float)yi0, mPaint);
-		
-		double xi0=(0-xMin)*this.getWidth()/(xMax - xMin);
-		canvas.drawLine((float)xi0, 0, (float)xi0, getHeight(), mPaint);
+
+		double yi0 = 1.0 * this.getHeight() - 1.0 * (0 - yMin) * this.getHeight() / (yMax - yMin);
+		canvas.drawLine(0, (float) yi0, getWidth(), (float) yi0, mPaint);
+
+		double xi0 = (0 - xMin) * this.getWidth() / (xMax - xMin);
+		canvas.drawLine((float) xi0, 0, (float) xi0, getHeight(), mPaint);
 
 		mPaint.setColor(Color.BLUE);
 		mPaint.setStrokeWidth(3);
@@ -117,16 +120,93 @@ public class GraphicView extends View {
 			double x2 = xMin + 1.0 * (xi + 1.0) * (xMax - xMin) / this.getWidth();
 			double y2 = reversePolishNotation.cackulation(x2);
 
-			double yi1 = 1.0 * this.getHeight() - 1.0 * (y1-yMin) * this.getHeight() / (yMax - yMin);
-			double yi2 = 1.0 * this.getHeight() - 1.0 * (y2-yMin) * this.getHeight() / (yMax - yMin);
+			double yi1 = 1.0 * this.getHeight() - 1.0 * (y1 - yMin) * this.getHeight() / (yMax - yMin);
+			double yi2 = 1.0 * this.getHeight() - 1.0 * (y2 - yMin) * this.getHeight() / (yMax - yMin);
 
-			canvas.drawLine((float)xi, (float)yi1, (float)(xi + 1.0), (float)yi2, mPaint);
+			canvas.drawLine((float) xi, (float) yi1, (float) (xi + 1.0), (float) yi2, mPaint);
 
 		}
-		
 
-		
+	}
 
+	@Override
+	public boolean onTouchEvent(MotionEvent event) {
+		// TODO Auto-generated method stub
+
+		// событие
+		int actionMask = event.getActionMasked();
+		// индекс касания
+		int pointerIndex = event.getActionIndex();
+		// число касаний
+		int pointerCount = event.getPointerCount();
+
+		switch (actionMask) {
+		case MotionEvent.ACTION_DOWN: // первое касание
+			// inTouch = true;
+			break;
+		case MotionEvent.ACTION_POINTER_DOWN: // последующие касания
+			// downPI = pointerIndex;
+			break;
+
+		case MotionEvent.ACTION_UP: // прерывание последнего касания
+			xTouchOld = 0;
+			yTouchOld = 0;
+
+			// inTouch = false;
+			// sb.setLength(0);
+		case MotionEvent.ACTION_POINTER_UP: // прерывания касаний
+			// upPI = pointerIndex;
+			break;
+
+		case MotionEvent.ACTION_MOVE: // движение
+			/*
+			 * Toast toast = Toast.makeText(this.getContext(),
+			 * "Пора покормить кота!", Toast.LENGTH_SHORT); toast.show();
+			 */
+
+			float x = event.getX();
+			float y = event.getY();
+			double step;
+
+			if ((Math.abs(xTouchOld - x) > 0) && (xTouchOld > 0)) {
+				step=1.0*(xTouchOld - x) * (xMax - xMin) / getWidth();
+				xMin = xMin + step;
+				xMax = xMax + step;
+
+				// xMin=xMin+xTouchOld-x;
+				// xMax=xMax+xTouchOld-x;
+				invalidate();
+
+			}
+			if ((Math.abs(yTouchOld - y) > 0) && (yTouchOld > 0)) {
+				step=1.0*(yTouchOld - y) * (yMax - yMin) / getHeight();
+				yMin = yMin - step;
+				yMax = yMax - step;
+
+				// xMin=xMin+xTouchOld-x;
+				// xMax=xMax+xTouchOld-x;
+				invalidate();
+
+			}
+			xTouchOld = x;
+			yTouchOld = y;
+			// sb.setLength(0);
+			/*
+			 * for (int i = 0; i < 10; i++) { sb.append("Index = " + i); if (i <
+			 * pointerCount) { sb.append(", ID = " + event.getPointerId(i));
+			 * sb.append(", X = " + event.getX(i)); sb.append(", Y = " +
+			 * event.getY(i)); } else { sb.append(", ID = ");
+			 * sb.append(", X = "); sb.append(", Y = "); } sb.append("\r\n"); }
+			 */
+			break;
+		}
+		/*
+		 * result = "down: " + downPI + "\n" + "up: " + upPI + "\n";
+		 * 
+		 * if (inTouch) { result += "pointerCount = " + pointerCount + "\n" +
+		 * sb.toString(); } tv.setText(result);
+		 */
+		return true;// super.onTouchEvent(event);
 	}
 
 }
