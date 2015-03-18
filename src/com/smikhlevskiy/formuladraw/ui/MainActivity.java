@@ -1,8 +1,11 @@
 package com.smikhlevskiy.formuladraw.ui;
 
-import com.smikhlevskiy.formuladraw.entity.FormulaDrawCore;
+
+import com.smikhlevskiy.formuladraw.ui.UserRegActivity;
+import com.parse.ParseUser;
+import com.smikhlevskiy.formuladraw.entity.FormulaDrawController;
 import com.smikhlevskiy.formuladraw.model.FindRoot;
-import com.smikhlevskiy.functiondraw.R;
+import com.smikhlevskiy.formuladraw.R;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -14,58 +17,89 @@ import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 public class MainActivity extends ActionBarActivity {
 	private Button buttonCalck;
 	private Button buttonDraw;
 	private Button buttonRoot;
+	public Button buttonUserReg;
 	private EditText editTextFunction;
-	private EditText editTextX;
+	// private EditText editTextX;
 	private EditText editTextXStart;
 	private EditText editTextXEnd;
 	private TextView textViewResult;
+	private TextView textViewRegUser;
 	public GraphicView graphicView;
 
-	private FormulaDrawCore formulaDrawCore;
+	private void drawUserInfo() {
+
+		if (ParseUser.getCurrentUser() == null) {
+			buttonUserReg.setText(getString(R.string.registration));
+			textViewRegUser.setText(getString(R.string.notRegistredUser));
+		} else {
+			textViewRegUser.setText(getString(R.string.user)
+					+ ParseUser.getCurrentUser().getUsername());
+			buttonUserReg.setText(getString(R.string.logOut));
+		}
+		;
+
+	}
+
+	private FormulaDrawController formulaDrawController;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
 
-		formulaDrawCore = new FormulaDrawCore();
+		formulaDrawController = new FormulaDrawController();
 
 		buttonCalck = (Button) findViewById(R.id.buttonCalck);
 		buttonDraw = (Button) findViewById(R.id.buttonDraw);
 		buttonRoot = (Button) findViewById(R.id.buttonRoot);
+		buttonUserReg = (Button) findViewById(R.id.buttonRegistration);
 
 		editTextFunction = (EditText) findViewById(R.id.editTextFormula);
 		textViewResult = (TextView) findViewById(R.id.textViewResult);
-		editTextX = (EditText) findViewById(R.id.editTextX);
+		textViewRegUser =(TextView) findViewById(R.id.textViewRegUser);
 		editTextXStart = (EditText) findViewById(R.id.editTextXstart);
 		editTextXEnd = (EditText) findViewById(R.id.editTextXend);
 		graphicView = (GraphicView) findViewById(R.id.graphicView);
-		
 
 		buttonRoot.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				FindRoot findRoot = new FindRoot(getApplicationContext(),editTextFunction.getText().toString(),new Double(
-						editTextXStart.getText().toString()), new Double(editTextXEnd.getText().toString()),(double)0.01); 
-				
+				FindRoot findRoot = new FindRoot(getApplicationContext(), editTextFunction.getText().toString(),
+						new Double(editTextXStart.getText().toString()), new Double(editTextXEnd.getText().toString()),
+						(double) 0.01);
+
 			}
-			});
-			
-		
+		});
+
+		/* -----Button User Registration form Set On ClickListener---------- */
+		buttonUserReg.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				if (ParseUser.getCurrentUser() == null) {
+					startActivity(new Intent(MainActivity.this, UserRegActivity.class));
+				} else {
+					ParseUser.logOut();
+					drawUserInfo();
+				}
+
+			}
+
+		});
+
 		// --------------------------------------------
 		buttonDraw.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
 
-				formulaDrawCore.drawGraphic(graphicView,
-				 editTextFunction.getText().toString(), new Double(
-						editTextXStart.getText().toString()), new Double(editTextXEnd.getText().toString()));				
-				
+				formulaDrawController.drawGraphic(graphicView, editTextFunction.getText().toString(), new Double(
+						editTextXStart.getText().toString()), new Double(editTextXEnd.getText().toString()));
+
 			}
 
 		});
@@ -74,34 +108,26 @@ public class MainActivity extends ActionBarActivity {
 			@Override
 			public void onClick(View v) {
 
-				double xVal = new Double(editTextX.getText().toString());
-				textViewResult.setText(new Double(formulaDrawCore.cakulationFormula(editTextFunction.getText()
-						.toString(), xVal)).toString());
+				try {
+					textViewResult.setText(new Double(formulaDrawController.cakulator(editTextFunction.getText().toString(), /* xVal */
+							0.0)).toString());
+				} catch (ArithmeticException e) {
+					Toast.makeText(getApplicationContext(), getString(R.string.mathError), Toast.LENGTH_LONG).show();
+					textViewResult.setText("");
+				}
 
-				// functionDrawCore.compileFormula(editTextFunction.getText().toString());
-//				controller api
 			}
 
 		});
+		drawUserInfo();
+
+		formulaDrawController.drawGraphic(graphicView, /*editTextFunction.getText().toString()*/"X", -10,10);
 
 	}
-
 	@Override
-	public boolean onCreateOptionsMenu(Menu menu) {
-		// Inflate the menu; this adds items to the action bar if it is present.
-		getMenuInflater().inflate(R.menu.main, menu);
-		return true;
+	protected void onResume() {
+		drawUserInfo();// Draw user info after closing Registration form
+		super.onResume();
 	}
 
-	@Override
-	public boolean onOptionsItemSelected(MenuItem item) {
-		// Handle action bar item clicks here. The action bar will
-		// automatically handle clicks on the Home/Up button, so long
-		// as you specify a parent activity in AndroidManifest.xml.
-		int id = item.getItemId();
-		if (id == R.id.action_settings) {
-			return true;
-		}
-		return super.onOptionsItemSelected(item);
-	}
 }

@@ -11,16 +11,37 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginLeft="10dp"
-        android:text="Текст формулы:" />
+        android:text="@string/textFormula" />
 
-    <EditText
-        android:id="@+id/editTextFormula"
+    <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="10dp"
-        android:ems="100"
-        android:text="5*x*x+10*x+10" >
-    </EditText>
+        android:orientation="horizontal" >
+
+        <EditText
+            android:id="@+id/editTextFormula"
+            android:layout_width="220dp"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:ems="50"
+            android:text="@string/startFormula" >
+        </EditText>
+
+        <Button
+            android:id="@+id/buttonCalck"
+            android:layout_width="50dp"
+            android:layout_height="wrap_content"
+            android:drawableLeft="@drawable/calck"
+            android:text="" />
+
+        <TextView
+            android:id="@+id/textViewResult"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text=""
+            android:textColor="#000000"
+            android:textSize="17sp" />
+    </LinearLayout>
 
     <LinearLayout
         android:layout_width="wrap_content"
@@ -28,63 +49,21 @@
         android:orientation="horizontal" >
 
         <Button
-            android:id="@+id/buttonCalck"
+            android:id="@+id/buttonDraw"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="10dp"
-            android:drawableLeft="@drawable/calck"
-            android:text=" Вычислить" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="10dp"
-            android:text="x=" />
-
-        <EditText
-            android:id="@+id/editTextX"
-            android:layout_width="80dp"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="5dp"
-            android:ems="10"
-            android:text="10" >
-        </EditText>
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="5dp"
-            android:text="f(x)=" />
-
-        <TextView
-            android:id="@+id/textViewResult"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="0.0"
-            android:textColor="#000000" />
-    </LinearLayout>
-
-    <Button
-        android:id="@+id/buttonDraw"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="10dp"
-        android:text="Вывести график" />
-
-    <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal" >
+            android:text="@string/drawGraph" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="10dp"
-            android:text="Xначала" />
+            android:text="@string/beginGraph" />
 
         <EditText
             android:id="@+id/editTextXstart"
-            android:layout_width="80dp"
+            android:layout_width="60dp"
             android:layout_height="wrap_content"
             android:layout_marginLeft="10dp"
             android:ems="10"
@@ -95,11 +74,11 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="10dp"
-            android:text="Xконца" />
+            android:text="@string/endGraph" />
 
         <EditText
             android:id="@+id/editTextXend"
-            android:layout_width="80dp"
+            android:layout_width="60dp"
             android:layout_height="wrap_content"
             android:layout_marginLeft="10dp"
             android:ems="10"
@@ -115,24 +94,31 @@
         android:layout_marginRight="10dp" >
     </com.smikhlevskiy.formuladraw.ui.GraphicView>
 
+    <Button
+        android:id="@+id/buttonRoot"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="10dp"
+        android:text="@string/findRoot" />
+
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal" >
 
         <Button
-            android:id="@+id/buttonRoot"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="10dp"
-            android:text="Корень" />
-		<Button
             android:id="@+id/buttonRegistration"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="1dp"
-            android:text="Регистрация" />        
+            android:layout_marginLeft="10dp"
+            android:text="@string/registration" />
+
+        <TextView
+            android:id="@+id/textViewRegUser"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:text="@string/notRegistredUser" />
     </LinearLayout>
-    
 
 </LinearLayout>

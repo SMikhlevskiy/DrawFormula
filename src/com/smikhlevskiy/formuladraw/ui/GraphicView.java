@@ -20,7 +20,9 @@ public class GraphicView extends View {
 	private Double yMax = 0.0;
 	private float xTouchOld = 0;
 	private float yTouchOld = 0;
-
+	private int lastPointerCount = 1;
+	private float lastDtX = 0;
+	private float lastDtY = 0;
 	private boolean drawCustomCanvas = false;
 
 	private void initImageView() {
@@ -42,11 +44,8 @@ public class GraphicView extends View {
 
 	}
 
-	public void setFormula(String text) {
-		reversePolishNotation = new ReversePolishNotation();
-		reversePolishNotation.setFormula(text);
-		reversePolishNotation.compile();
-
+	public void setReversePolishNotation(ReversePolishNotation reversePolishNotation) {
+		this.reversePolishNotation = reversePolishNotation;
 	}
 
 	public Double getxMin() {
@@ -65,7 +64,14 @@ public class GraphicView extends View {
 		yMax = Double.MIN_VALUE;
 		for (int xi = 0; xi <= this.getWidth(); xi++) {
 			double x = xMin + 1.0 * xi * (xMax - xMin) / this.getWidth();
-			double y = reversePolishNotation.cackulation(x);
+			double y=0;
+			try{
+			y = reversePolishNotation.cackulation(x);
+			} catch (ArithmeticException e) {
+				
+				continue;
+			}
+ 
 
 			if (y > yMax)
 				yMax = y;
@@ -116,9 +122,19 @@ public class GraphicView extends View {
 		for (double xi = 0; xi < this.getWidth(); xi++) {
 
 			double x1 = xMin + 1.0 * xi * (xMax - xMin) / this.getWidth();
-			double y1 = reversePolishNotation.cackulation(x1);
+			double y1 = 0;
+			try {
+				y1 = reversePolishNotation.cackulation(x1);
+			} catch (ArithmeticException e) {
+				continue;
+			}
 			double x2 = xMin + 1.0 * (xi + 1.0) * (xMax - xMin) / this.getWidth();
-			double y2 = reversePolishNotation.cackulation(x2);
+			double y2 = 0;
+			try {
+				y2 = reversePolishNotation.cackulation(x2);
+			} catch (ArithmeticException e) {
+				continue;
+			}
 
 			double yi1 = 1.0 * this.getHeight() - 1.0 * (y1 - yMin) * this.getHeight() / (yMax - yMin);
 			double yi2 = 1.0 * this.getHeight() - 1.0 * (y2 - yMin) * this.getHeight() / (yMax - yMin);
@@ -166,10 +182,45 @@ public class GraphicView extends View {
 
 			float x = event.getX();
 			float y = event.getY();
-			double step;
+			// -----------scale----------------
+			if ((pointerCount >= 2) && (lastPointerCount > 1)) {
+				float dtY = Math.abs(event.getY(0) - event.getY(1));
+				float dtX = Math.abs(event.getX(0) - event.getX(1));
 
+				if (dtX - lastDtX != 0) {
+
+					double step = 1.0 * (lastDtX - dtX) * (xMax - xMin) / getWidth();
+					xMin = xMin - step / 2;
+					xMax = xMax + step / 2;
+					invalidate();
+
+				}
+				if (dtY - lastDtY != 0) {
+
+					double step = 1.0 * (lastDtY - dtY) * (yMax - yMin) / getHeight();
+					yMin = yMin - step / 2;
+					yMax = yMax + step / 2;
+					invalidate();
+
+				}
+
+			}
+			lastPointerCount = pointerCount;
+
+			if (pointerCount > 1) {
+				lastDtX = Math.abs(event.getX(0) - event.getX(1));
+				lastDtY = Math.abs(event.getY(0) - event.getY(1));
+
+				xTouchOld = x;
+				yTouchOld = y;
+
+				return true;
+			}
+
+			double step;
+			// -------Move----
 			if ((Math.abs(xTouchOld - x) > 0) && (xTouchOld > 0)) {
-				step=1.0*(xTouchOld - x) * (xMax - xMin) / getWidth();
+				step = 1.0 * (xTouchOld - x) * (xMax - xMin) / getWidth();
 				xMin = xMin + step;
 				xMax = xMax + step;
 
@@ -179,12 +230,10 @@ public class GraphicView extends View {
 
 			}
 			if ((Math.abs(yTouchOld - y) > 0) && (yTouchOld > 0)) {
-				step=1.0*(yTouchOld - y) * (yMax - yMin) / getHeight();
+				step = 1.0 * (yTouchOld - y) * (yMax - yMin) / getHeight();
 				yMin = yMin - step;
 				yMax = yMax - step;
 
-				// xMin=xMin+xTouchOld-x;
-				// xMax=xMax+xTouchOld-x;
 				invalidate();
 
 			}
@@ -200,6 +249,7 @@ public class GraphicView extends View {
 			 */
 			break;
 		}
+
 		/*
 		 * result = "down: " + downPI + "\n" + "up: " + upPI + "\n";
 		 * 

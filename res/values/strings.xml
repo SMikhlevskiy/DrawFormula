@@ -2,7 +2,30 @@
 <resources>
 
     <string name="app_name">Formula Draw</string>
-    <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
+    <string name="mathError">Математическая ошибка</string>
+    <string name="textFormula">Текст формулы:</string>
+    <string name="startFormula">5*x*x+10*x+10</string>
+    <string name="drawGraph">График</string>
+    <string name="beginGraph">Начало</string>
+    <string name="endGraph">Конец</string>
+    <string name="findRoot">Корень</string>
+    <string name="registration">Регистрация</string>
+    <string name="logOut">Выход</string>
+    <string name="login">"Логин"</string>
+    <string name="password">"Пароль"</string>
+    <string name="oK">"OK"</string>
+    <string name="cansel">"Cansel"</string>
+    <string name="newUser">"Новый пользователь"</string>
+    <string name="eMail">"E-mail"</string>
+    <string name="regOK">"Пользователь успешно зарегистрирован""</string>
+    <string name="regBad">"Ошибка регистрации пользователя: "</string>
+    <string name="errorLogin">"Не верный Логин"</string>
+    <string name="errorPassword">"Не верный Пароль"</string>
+    <string name="errorEmail">"Не верный E-mail"</string>
+    <string name="newUserRegOK">"Новый пользователь успешно зарегистрирован""</string>
+    <string name="newUserRegBad">"Ошибка регистрации нового пользователя: "</string>
+    <string name="notRegistredUser">"Пользователь не зарегистрирован"</string>
+    <string name="user">"Пользователь: "</string>
 
 </resources>

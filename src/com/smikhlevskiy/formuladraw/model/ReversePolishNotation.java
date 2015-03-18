@@ -2,6 +2,8 @@ package com.smikhlevskiy.formuladraw.model;
 
 import java.util.ArrayList;
 
+import android.widget.Toast;
+
 enum TypeLex {
 	OPERATOR, OPEN_BRACE, CLOSE_BRACE, DIGITAL, FUNCTION
 };
@@ -229,6 +231,8 @@ public class ReversePolishNotation {
 
 	// ---------------Вычисление значения------------------------
 	public double cackulation(double x) {
+	try {
+		
 		if (lexPolish == null)
 			return 0;
 
@@ -262,6 +266,8 @@ public class ReversePolishNotation {
 			if (lexPolish.get(i).typ == TypeLex.OPERATOR) {
 				switch (lexPolish.get(i).operator) {
 				case '/':
+					if (valueStack.get(valueStack.size() - 1)==0.0) throw new ArithmeticException();  
+					
 					valueStack.set(valueStack.size() - 2,
 							new Double(valueStack.get(valueStack.size() - 2) / valueStack.get(valueStack.size() - 1)));
 
@@ -292,6 +298,13 @@ public class ReversePolishNotation {
 			return valueStack.get(valueStack.size() - 1);
 
 		return 0;// error
+	}
+		catch (ArithmeticException e) {
+
+			
+			
+			throw e;	
+			}
 
 	}
 
@@ -300,8 +313,8 @@ public class ReversePolishNotation {
 	}
 
 	public void setFormula(String textFormula) {
-		this.textFormula = textFormula;
-		charFormula = textFormula.toCharArray();
+		this.textFormula = textFormula.replace(" ", "").toLowerCase();
+		charFormula = this.textFormula.toCharArray();
 	}
 
 }
