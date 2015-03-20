@@ -1,6 +1,5 @@
 package com.smikhlevskiy.formuladraw.ui;
 
-
 import com.smikhlevskiy.formuladraw.ui.UserRegActivity;
 import com.parse.ParseUser;
 import com.smikhlevskiy.formuladraw.entity.FormulaDrawController;
@@ -8,7 +7,9 @@ import com.smikhlevskiy.formuladraw.model.FindRoot;
 import com.smikhlevskiy.formuladraw.R;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -31,6 +32,11 @@ public class MainActivity extends ActionBarActivity {
 	private TextView textViewResult;
 	private TextView textViewRegUser;
 	public GraphicView graphicView;
+	private boolean prFirstFocus = true;
+	private SharedPreferences formulaDrawPreferences;
+
+	public static final String APP_PREFERENCES = "formuladrawpreferences";
+	public static final String APP_PREFERENCES_TEXTFormula = "formula";
 
 	private void drawUserInfo() {
 
@@ -38,8 +44,7 @@ public class MainActivity extends ActionBarActivity {
 			buttonUserReg.setText(getString(R.string.registration));
 			textViewRegUser.setText(getString(R.string.notRegistredUser));
 		} else {
-			textViewRegUser.setText(getString(R.string.user)
-					+ ParseUser.getCurrentUser().getUsername());
+			textViewRegUser.setText(getString(R.string.user) + ParseUser.getCurrentUser().getUsername());
 			buttonUserReg.setText(getString(R.string.logOut));
 		}
 		;
@@ -50,6 +55,7 @@ public class MainActivity extends ActionBarActivity {
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
+
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
 
@@ -62,10 +68,20 @@ public class MainActivity extends ActionBarActivity {
 
 		editTextFunction = (EditText) findViewById(R.id.editTextFormula);
 		textViewResult = (TextView) findViewById(R.id.textViewResult);
-		textViewRegUser =(TextView) findViewById(R.id.textViewRegUser);
+		textViewRegUser = (TextView) findViewById(R.id.textViewRegUser);
 		editTextXStart = (EditText) findViewById(R.id.editTextXstart);
 		editTextXEnd = (EditText) findViewById(R.id.editTextXend);
 		graphicView = (GraphicView) findViewById(R.id.graphicView);
+
+		android.app.ActionBar bar = getActionBar();
+		bar.setDisplayShowHomeEnabled(true);
+		 //actionBar.setIcon(R.drawable.ic_launcher);
+		
+		
+		// ---------Set Last Text Formula--------------
+
+		formulaDrawPreferences = getSharedPreferences(APP_PREFERENCES, getApplicationContext().MODE_PRIVATE);
+		editTextFunction.setText(formulaDrawPreferences.getString(APP_PREFERENCES_TEXTFormula, "x*x+x"));
 
 		buttonRoot.setOnClickListener(new OnClickListener() {
 			@Override
@@ -109,7 +125,8 @@ public class MainActivity extends ActionBarActivity {
 			public void onClick(View v) {
 
 				try {
-					textViewResult.setText(new Double(formulaDrawController.cakulator(editTextFunction.getText().toString(), /* xVal */
+					textViewResult.setText(new Double(formulaDrawController.cakulator(editTextFunction.getText()
+							.toString(), /* xVal */
 							0.0)).toString());
 				} catch (ArithmeticException e) {
 					Toast.makeText(getApplicationContext(), getString(R.string.mathError), Toast.LENGTH_LONG).show();
@@ -119,15 +136,48 @@ public class MainActivity extends ActionBarActivity {
 			}
 
 		});
-		drawUserInfo();
-
-		formulaDrawController.drawGraphic(graphicView, /*editTextFunction.getText().toString()*/"X", -10,10);
 
 	}
+
+	/*-------Draw Graphic in On FirstFocus. use because do not have size of view in OnCreate--*/
+	@Override
+	public void onWindowFocusChanged(boolean hasFocus) {
+		if (prFirstFocus)
+			formulaDrawController.drawGraphic(graphicView, editTextFunction.getText().toString(), new Double(
+					editTextXStart.getText().toString()), new Double(editTextXEnd.getText().toString()));
+		prFirstFocus = false;
+		// TODO Auto-generated method stub
+		super.onWindowFocusChanged(hasFocus);
+		// Here you can get the size!
+	}
+
+	@Override
+	protected void onPause() {
+		// Save text formula
+
+		SharedPreferences.Editor editor = formulaDrawPreferences.edit();
+		editor.putString(APP_PREFERENCES_TEXTFormula, editTextFunction.getText().toString());
+		editor.commit();
+
+		super.onPause();
+
+	}
+
 	@Override
 	protected void onResume() {
 		drawUserInfo();// Draw user info after closing Registration form
+
 		super.onResume();
+
+	}
+
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+
+		getMenuInflater().inflate(R.menu.main, menu);
+
+		return true;
+
 	}
 
 }

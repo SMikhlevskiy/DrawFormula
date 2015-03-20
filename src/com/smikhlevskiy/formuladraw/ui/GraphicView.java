@@ -1,5 +1,6 @@
 package com.smikhlevskiy.formuladraw.ui;
 
+import com.smikhlevskiy.formuladraw.R;
 import com.smikhlevskiy.formuladraw.model.ReversePolishNotation;
 
 import android.content.Context;
@@ -64,14 +65,14 @@ public class GraphicView extends View {
 		yMax = Double.MIN_VALUE;
 		for (int xi = 0; xi <= this.getWidth(); xi++) {
 			double x = xMin + 1.0 * xi * (xMax - xMin) / this.getWidth();
-			double y=0;
-			try{
-			y = reversePolishNotation.cackulation(x);
+			double y = 0;
+			try {
+				y = reversePolishNotation.cackulation(x);
+
 			} catch (ArithmeticException e) {
-				
+
 				continue;
 			}
- 
 
 			if (y > yMax)
 				yMax = y;

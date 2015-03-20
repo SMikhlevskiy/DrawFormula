@@ -1,12 +1,24 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    tools:context="com.smikhlevskiy.functiondraw.MainActivity" >
+    tools:context="com.example.probapera.MainActivity" >
 
     <item
         android:id="@+id/action_settings"
         android:orderInCategory="100"
         android:title="@string/action_settings"
-        app:showAsAction="never"/>
+        app:showAsAction="always"/>
+	<item
+        android:id="@+id/item2"
+        android:orderInCategory="100"
+        android:showAsAction="always"
+        android:title="BEBEBE">
+    </item>
+    <item
+        android:id="@+id/item3"
+        android:showAsAction="ifRoom"
+        android:title="BEBEBE">
+    </item>    
+	
 
 </menu>

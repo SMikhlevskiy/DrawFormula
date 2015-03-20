@@ -1693,6 +1693,8 @@ containing a value of this type.
         public static final int icon=0x7f090026;
         public static final int ifRoom=0x7f090016;
         public static final int image=0x7f090023;
+        public static final int item2=0x7f090061;
+        public static final int item3=0x7f090062;
         public static final int listMode=0x7f09000a;
         public static final int list_item=0x7f090025;
         public static final int middle=0x7f09001d;
@@ -1861,6 +1863,10 @@ containing a value of this type.
         public static final int errorLogin=0x7f0a0023;
         public static final int errorPassword=0x7f0a0024;
         public static final int findRoot=0x7f0a0018;
+        public static final int item1=0x7f0a002a;
+        public static final int item2=0x7f0a002b;
+        public static final int item3=0x7f0a002c;
+        public static final int item4=0x7f0a002d;
         public static final int logOut=0x7f0a001a;
         public static final int login=0x7f0a001b;
         public static final int mathError=0x7f0a0012;

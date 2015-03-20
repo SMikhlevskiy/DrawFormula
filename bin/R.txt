@@ -392,6 +392,8 @@ int id homeAsUp 0x7f09000e
 int id icon 0x7f090026
 int id ifRoom 0x7f090016
 int id image 0x7f090023
+int id item2 0x7f090061
+int id item3 0x7f090062
 int id listMode 0x7f09000a
 int id list_item 0x7f090025
 int id middle 0x7f09001d
@@ -490,6 +492,10 @@ int string errorEmail 0x7f0a0025
 int string errorLogin 0x7f0a0023
 int string errorPassword 0x7f0a0024
 int string findRoot 0x7f0a0018
+int string item1 0x7f0a002a
+int string item2 0x7f0a002b
+int string item3 0x7f0a002c
+int string item4 0x7f0a002d
 int string logOut 0x7f0a001a
 int string login 0x7f0a001b
 int string mathError 0x7f0a0012

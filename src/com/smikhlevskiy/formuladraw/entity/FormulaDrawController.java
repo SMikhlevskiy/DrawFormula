@@ -11,7 +11,12 @@ public class FormulaDrawController {
 public void drawGraphic(GraphicView graphicView,String textFormula,double xStart,double xEnd){
 	ReversePolishNotation reversePolishNotation=new ReversePolishNotation();
 	reversePolishNotation.setFormula(textFormula);
+	
+	
+	
 	reversePolishNotation.compile();
+	
+	
 	
 	graphicView.setReversePolishNotation(reversePolishNotation);
 	graphicView.setxMinMax(xStart,xEnd);	

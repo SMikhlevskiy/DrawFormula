@@ -2,7 +2,7 @@ package com.smikhlevskiy.formuladraw.model;
 
 import java.util.ArrayList;
 
-import android.widget.Toast;
+
 
 enum TypeLex {
 	OPERATOR, OPEN_BRACE, CLOSE_BRACE, DIGITAL, FUNCTION
@@ -90,6 +90,8 @@ public class ReversePolishNotation {
 
 	// --------------------------Проверка текста формулы---------------------
 	private void controlTextFormula() {
+		
+		
 
 	}
 
@@ -259,7 +261,7 @@ public class ReversePolishNotation {
 					continue;
 
 				default:
-					break;// eeror
+					throw (new ArithmeticException());// unknown function
 				}
 			}
 
