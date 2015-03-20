@@ -27,10 +27,11 @@
     <string name="newUserRegBad">"Ошибка регистрации нового пользователя: "</string>
     <string name="notRegistredUser">"Пользователь не зарегистрирован"</string>
     <string name="user">"Пользователь: "</string>
+    <string name="item1">1/cos(x)</string>
+    <string name="item2">1/x</string>
+    <string name="item3">x*x+x</string>
+    <string name="item4">x</string>
+    <string name="item5">x*cos(x)</string>
+    <string name="history">история</string>
 
-    <string name="item1">Item1</string>
-	<string name="item2">Item2</string>
-	<string name="item3">Item3</string>
-	<string name="item4">Item4</string>
-	
 </resources>

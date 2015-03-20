@@ -11,6 +11,8 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
+import android.view.ContextMenu;
+import android.view.ContextMenu.ContextMenuInfo;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -59,7 +61,7 @@ public class MainActivity extends ActionBarActivity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
 
-		formulaDrawController = new FormulaDrawController();
+		formulaDrawController = new FormulaDrawController(this);
 
 		buttonCalck = (Button) findViewById(R.id.buttonCalck);
 		buttonDraw = (Button) findViewById(R.id.buttonDraw);
@@ -73,15 +75,14 @@ public class MainActivity extends ActionBarActivity {
 		editTextXEnd = (EditText) findViewById(R.id.editTextXend);
 		graphicView = (GraphicView) findViewById(R.id.graphicView);
 
-		android.app.ActionBar bar = getActionBar();
+		ActionBar bar = getSupportActionBar();
 		bar.setDisplayShowHomeEnabled(true);
-		 //actionBar.setIcon(R.drawable.ic_launcher);
-		
-		
-		// ---------Set Last Text Formula--------------
+		bar.setIcon(R.drawable.ic_launcher);
 
 		formulaDrawPreferences = getSharedPreferences(APP_PREFERENCES, getApplicationContext().MODE_PRIVATE);
 		editTextFunction.setText(formulaDrawPreferences.getString(APP_PREFERENCES_TEXTFormula, "x*x+x"));
+		// ---------Set Last Text Formula--------------
+		// editTextFunction.setText(formulaDrawController.getFormula());
 
 		buttonRoot.setOnClickListener(new OnClickListener() {
 			@Override
@@ -142,9 +143,11 @@ public class MainActivity extends ActionBarActivity {
 	/*-------Draw Graphic in On FirstFocus. use because do not have size of view in OnCreate--*/
 	@Override
 	public void onWindowFocusChanged(boolean hasFocus) {
-		if (prFirstFocus)
+		if (prFirstFocus) {
 			formulaDrawController.drawGraphic(graphicView, editTextFunction.getText().toString(), new Double(
 					editTextXStart.getText().toString()), new Double(editTextXEnd.getText().toString()));
+
+		}
 		prFirstFocus = false;
 		// TODO Auto-generated method stub
 		super.onWindowFocusChanged(hasFocus);
@@ -154,7 +157,7 @@ public class MainActivity extends ActionBarActivity {
 	@Override
 	protected void onPause() {
 		// Save text formula
-
+		// formulaDrawController.saveFormula(editTextFunction.getText().toString());
 		SharedPreferences.Editor editor = formulaDrawPreferences.edit();
 		editor.putString(APP_PREFERENCES_TEXTFormula, editTextFunction.getText().toString());
 		editor.commit();
@@ -176,8 +179,32 @@ public class MainActivity extends ActionBarActivity {
 
 		getMenuInflater().inflate(R.menu.main, menu);
 
+		// MenuItem bedMenuItem = menu.findItem(R.id.item1);
+		// bedMenuItem.setTitle("Коровки");
+
+		// int base = Menu.CATEGORY_SECONDARY;
+
+		// menu.add(base, base + 1, base + 1, "sec. item 1");
+
+		// MenuItem myMenuItem = menu.findItem(R.id.action_settings);
+
+		// Inflating the sub_menu menu this way, will add its menu items
+		// to the empty SubMenu you created in the xml
+		// getMenuInflater().inflate(R.menu, myMenuItem.getSubMenu());
+
 		return true;
 
 	}
 
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		/*
+		 * switch(item.getItemId()){ case R.id.item1:
+		 * 
+		 * break; }
+		 */
+		if (item.getItemId() != R.id.history)
+			editTextFunction.setText(item.getTitle());
+		return true;
+	}
 }
