@@ -1,6 +1,12 @@
 package com.smikhlevskiy.formuladraw.ui;
 
+import java.util.List;
+
 import com.smikhlevskiy.formuladraw.ui.UserRegActivity;
+import com.parse.FindCallback;
+import com.parse.ParseException;
+import com.parse.ParseObject;
+import com.parse.ParseQuery;
 import com.parse.ParseUser;
 import com.smikhlevskiy.formuladraw.entity.FormulaDrawController;
 import com.smikhlevskiy.formuladraw.model.FindRoot;
@@ -37,9 +43,10 @@ public class MainActivity extends ActionBarActivity {
 	private boolean prFirstFocus = true;
 	private SharedPreferences formulaDrawPreferences;
 
-	public static final String APP_PREFERENCES = "formuladrawpreferences";
-	public static final String APP_PREFERENCES_TEXTFormula = "formula";
-
+	private static final String APP_PREFERENCES = "formuladrawpreferences";
+	private static final String APP_PREFERENCES_TEXTFormula = "formula";
+	MenuItem FDMenuItem[]=new MenuItem[5];
+	
 	private void drawUserInfo() {
 
 		if (ParseUser.getCurrentUser() == null) {
@@ -50,6 +57,40 @@ public class MainActivity extends ActionBarActivity {
 			buttonUserReg.setText(getString(R.string.logOut));
 		}
 		;
+
+	}
+
+	public void GetOldFormulas() {
+		ParseUser user = ParseUser.getCurrentUser();
+		if (user == null)
+			return;
+
+		ParseQuery<ParseObject> query = ParseQuery.getQuery("UserDatas");
+		query.whereEqualTo("user", user);
+		query.findInBackground(new FindCallback<ParseObject>() {
+			public void done(List<ParseObject> objects, ParseException e) {
+				if (e == null) {
+					 
+
+					for (int i=0;i<5;i++)
+						if (objects.size()-i-1>=0)
+					{
+						FDMenuItem[i].setTitle(objects.get(objects.size()-i-1).getString("formula"));
+					
+					
+					}
+					/* 
+					 * 		// MenuItem bedMenuItem = menu.findItem(R.id.item1);
+		// bedMenuItem.setTitle("Коровки");
+
+					 * String firstItemId = objects.get(0).getString("formula");
+			         Toast.makeText(MainActivity.this, firstItemId, Toast.LENGTH_SHORT).show();*/
+				} else {
+					
+					// Something went wrong.
+				}
+			}
+		});
 
 	}
 
@@ -81,6 +122,8 @@ public class MainActivity extends ActionBarActivity {
 
 		formulaDrawPreferences = getSharedPreferences(APP_PREFERENCES, getApplicationContext().MODE_PRIVATE);
 		editTextFunction.setText(formulaDrawPreferences.getString(APP_PREFERENCES_TEXTFormula, "x*x+x"));
+		
+		//GetOldFormulas();
 		// ---------Set Last Text Formula--------------
 		// editTextFunction.setText(formulaDrawController.getFormula());
 
@@ -114,8 +157,20 @@ public class MainActivity extends ActionBarActivity {
 			@Override
 			public void onClick(View v) {
 
-				formulaDrawController.drawGraphic(graphicView, editTextFunction.getText().toString(), new Double(
+				 formulaDrawController.drawGraphic(graphicView, editTextFunction.getText().toString(), new Double(
 						editTextXStart.getText().toString()), new Double(editTextXEnd.getText().toString()));
+
+				ParseUser user = ParseUser.getCurrentUser();
+				if (user != null) {
+					// Make a new post
+					ParseObject post = new ParseObject("UserDatas");
+					post.put("formula", editTextFunction.getText().toString());
+					post.put("user", user);
+					post.saveInBackground();
+					
+					GetOldFormulas();
+
+				}
 
 			}
 
@@ -169,7 +224,7 @@ public class MainActivity extends ActionBarActivity {
 	@Override
 	protected void onResume() {
 		drawUserInfo();// Draw user info after closing Registration form
-
+		GetOldFormulas();
 		super.onResume();
 
 	}
@@ -179,6 +234,16 @@ public class MainActivity extends ActionBarActivity {
 
 		getMenuInflater().inflate(R.menu.main, menu);
 
+ 
+				
+		FDMenuItem[0]=menu.findItem(R.id.item1);
+		
+		FDMenuItem[1]=menu.findItem(R.id.item2);
+		FDMenuItem[2]=menu.findItem(R.id.item3);
+		FDMenuItem[3]=menu.findItem(R.id.item4);
+		FDMenuItem[4]=menu.findItem(R.id.item5);
+		GetOldFormulas();
+				
 		// MenuItem bedMenuItem = menu.findItem(R.id.item1);
 		// bedMenuItem.setTitle("Коровки");
 
