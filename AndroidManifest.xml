@@ -28,6 +28,8 @@
         </activity>
         <activity android:name="com.smikhlevskiy.formuladraw.ui.UserRegActivity" >
         </activity>
+        <activity android:name="com.smikhlevskiy.formuladraw.ui.SelectFormulaActivity" >
+        </activity>
     </application>
 
 </manifest>

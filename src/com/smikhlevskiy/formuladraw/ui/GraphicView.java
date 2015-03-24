@@ -1,6 +1,5 @@
 package com.smikhlevskiy.formuladraw.ui;
 
-import com.smikhlevskiy.formuladraw.R;
 import com.smikhlevskiy.formuladraw.model.ReversePolishNotation;
 
 import android.content.Context;
@@ -10,7 +9,6 @@ import android.graphics.Paint;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
-import android.widget.Toast;
 
 public class GraphicView extends View {
 
@@ -57,7 +55,11 @@ public class GraphicView extends View {
 		return xMax;
 	}
 
-	public void setxMinMax(Double xMin, Double xMax) {
+	/**
+	 * set xMin,xMin and calckulate yMin&yMax
+	 * 
+	 */
+	public void setMinMax(Double xMin, Double xMax) {
 
 		this.xMin = xMin;
 		this.xMax = xMax;
@@ -82,6 +84,10 @@ public class GraphicView extends View {
 
 		yMax = yMax + 0.1 * (yMax - yMin);
 		yMin = yMin - 0.1 * (yMax - yMin);
+		if (Math.abs(yMax - yMin) < 0.00001) {
+			yMin = yMin - 10;
+			yMax = yMax + 10;
+		}
 
 	}
 
@@ -183,7 +189,7 @@ public class GraphicView extends View {
 
 			float x = event.getX();
 			float y = event.getY();
-			// -----------scale----------------
+			// -----------scale ----------------
 			if ((pointerCount >= 2) && (lastPointerCount > 1)) {
 				float dtY = Math.abs(event.getY(0) - event.getY(1));
 				float dtX = Math.abs(event.getX(0) - event.getX(1));
@@ -240,24 +246,10 @@ public class GraphicView extends View {
 			}
 			xTouchOld = x;
 			yTouchOld = y;
-			// sb.setLength(0);
-			/*
-			 * for (int i = 0; i < 10; i++) { sb.append("Index = " + i); if (i <
-			 * pointerCount) { sb.append(", ID = " + event.getPointerId(i));
-			 * sb.append(", X = " + event.getX(i)); sb.append(", Y = " +
-			 * event.getY(i)); } else { sb.append(", ID = ");
-			 * sb.append(", X = "); sb.append(", Y = "); } sb.append("\r\n"); }
-			 */
 			break;
 		}
 
-		/*
-		 * result = "down: " + downPI + "\n" + "up: " + upPI + "\n";
-		 * 
-		 * if (inTouch) { result += "pointerCount = " + pointerCount + "\n" +
-		 * sb.toString(); } tv.setText(result);
-		 */
-		return true;// super.onTouchEvent(event);
+		return true;
 	}
 
 }

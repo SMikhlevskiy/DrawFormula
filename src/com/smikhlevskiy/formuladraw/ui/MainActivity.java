@@ -29,24 +29,28 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 public class MainActivity extends ActionBarActivity {
+	static final private int CHOOSE_THIEF = 0;
 	private Button buttonCalck;
 	private Button buttonDraw;
 	private Button buttonRoot;
+	private Button buttonSelectFormula;
 	public Button buttonUserReg;
-	private EditText editTextFunction;
-	// private EditText editTextX;
+	private EditText editTextFunction;	
 	private EditText editTextXStart;
 	private EditText editTextXEnd;
 	private TextView textViewResult;
 	private TextView textViewRegUser;
-	public GraphicView graphicView;
+	private GraphicView graphicView;
 	private boolean prFirstFocus = true;
 	private SharedPreferences formulaDrawPreferences;
 
 	private static final String APP_PREFERENCES = "formuladrawpreferences";
 	private static final String APP_PREFERENCES_TEXTFormula = "formula";
-	MenuItem FDMenuItem[]=new MenuItem[5];
-	
+	private FormulaDrawController formulaDrawController;
+	MenuItem FDMenuItem[] = new MenuItem[5];
+	/**		Out information about current user
+	 * 
+	 */
 	private void drawUserInfo() {
 
 		if (ParseUser.getCurrentUser() == null) {
@@ -59,7 +63,9 @@ public class MainActivity extends ActionBarActivity {
 		;
 
 	}
-
+	/**		Get user's old formulas and add they to History menu
+	 * 
+	 */
 	public void GetOldFormulas() {
 		ParseUser user = ParseUser.getCurrentUser();
 		if (user == null)
@@ -70,31 +76,21 @@ public class MainActivity extends ActionBarActivity {
 		query.findInBackground(new FindCallback<ParseObject>() {
 			public void done(List<ParseObject> objects, ParseException e) {
 				if (e == null) {
-					 
 
-					for (int i=0;i<5;i++)
-						if (objects.size()-i-1>=0)
-					{
-						FDMenuItem[i].setTitle(objects.get(objects.size()-i-1).getString("formula"));
-					
-					
-					}
-					/* 
-					 * 		// MenuItem bedMenuItem = menu.findItem(R.id.item1);
-		// bedMenuItem.setTitle("Коровки");
+					for (int i = 0; i < 5; i++)
+						if (objects.size() - i - 1 >= 0) {
+							FDMenuItem[i].setTitle(objects.get(objects.size() - i - 1).getString("formula"));
 
-					 * String firstItemId = objects.get(0).getString("formula");
-			         Toast.makeText(MainActivity.this, firstItemId, Toast.LENGTH_SHORT).show();*/
+						}
 				} else {
-					
-					// Something went wrong.
+
 				}
 			}
 		});
 
 	}
 
-	private FormulaDrawController formulaDrawController;
+
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -108,6 +104,7 @@ public class MainActivity extends ActionBarActivity {
 		buttonDraw = (Button) findViewById(R.id.buttonDraw);
 		buttonRoot = (Button) findViewById(R.id.buttonRoot);
 		buttonUserReg = (Button) findViewById(R.id.buttonRegistration);
+		buttonSelectFormula = (Button) findViewById(R.id.buttonSelectFormula);
 
 		editTextFunction = (EditText) findViewById(R.id.editTextFormula);
 		textViewResult = (TextView) findViewById(R.id.textViewResult);
@@ -122,10 +119,7 @@ public class MainActivity extends ActionBarActivity {
 
 		formulaDrawPreferences = getSharedPreferences(APP_PREFERENCES, getApplicationContext().MODE_PRIVATE);
 		editTextFunction.setText(formulaDrawPreferences.getString(APP_PREFERENCES_TEXTFormula, "x*x+x"));
-		
-		//GetOldFormulas();
-		// ---------Set Last Text Formula--------------
-		// editTextFunction.setText(formulaDrawController.getFormula());
+
 
 		buttonRoot.setOnClickListener(new OnClickListener() {
 			@Override
@@ -151,13 +145,27 @@ public class MainActivity extends ActionBarActivity {
 			}
 
 		});
+		
+		/* -----Button User Registration form Set On ClickListener---------- */
+		buttonSelectFormula.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				
+				if (ParseUser.getCurrentUser() != null) {
+					startActivityForResult(new Intent(MainActivity.this, SelectFormulaActivity.class),CHOOSE_THIEF);				
+				} else Toast.makeText(MainActivity.this, "Зарегистрируйтись пожайлуста", Toast.LENGTH_LONG).show();
 
-		// --------------------------------------------
+			}
+
+		});
+
+
+		// --------------------------Draw Graphic-----------------
 		buttonDraw.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
 
-				 formulaDrawController.drawGraphic(graphicView, editTextFunction.getText().toString(), new Double(
+				formulaDrawController.drawGraphic(graphicView, editTextFunction.getText().toString(), new Double(
 						editTextXStart.getText().toString()), new Double(editTextXEnd.getText().toString()));
 
 				ParseUser user = ParseUser.getCurrentUser();
@@ -167,7 +175,7 @@ public class MainActivity extends ActionBarActivity {
 					post.put("formula", editTextFunction.getText().toString());
 					post.put("user", user);
 					post.saveInBackground();
-					
+
 					GetOldFormulas();
 
 				}
@@ -175,7 +183,7 @@ public class MainActivity extends ActionBarActivity {
 			}
 
 		});
-
+		//-------------------------Calckulator-----------------
 		buttonCalck.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
@@ -234,28 +242,14 @@ public class MainActivity extends ActionBarActivity {
 
 		getMenuInflater().inflate(R.menu.main, menu);
 
- 
-				
-		FDMenuItem[0]=menu.findItem(R.id.item1);
-		
-		FDMenuItem[1]=menu.findItem(R.id.item2);
-		FDMenuItem[2]=menu.findItem(R.id.item3);
-		FDMenuItem[3]=menu.findItem(R.id.item4);
-		FDMenuItem[4]=menu.findItem(R.id.item5);
+		FDMenuItem[0] = menu.findItem(R.id.item1);
+
+		FDMenuItem[1] = menu.findItem(R.id.item2);
+		FDMenuItem[2] = menu.findItem(R.id.item3);
+		FDMenuItem[3] = menu.findItem(R.id.item4);
+		FDMenuItem[4] = menu.findItem(R.id.item5);
 		GetOldFormulas();
-				
-		// MenuItem bedMenuItem = menu.findItem(R.id.item1);
-		// bedMenuItem.setTitle("Коровки");
 
-		// int base = Menu.CATEGORY_SECONDARY;
-
-		// menu.add(base, base + 1, base + 1, "sec. item 1");
-
-		// MenuItem myMenuItem = menu.findItem(R.id.action_settings);
-
-		// Inflating the sub_menu menu this way, will add its menu items
-		// to the empty SubMenu you created in the xml
-		// getMenuInflater().inflate(R.menu, myMenuItem.getSubMenu());
 
 		return true;
 
@@ -263,13 +257,15 @@ public class MainActivity extends ActionBarActivity {
 
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
-		/*
-		 * switch(item.getItemId()){ case R.id.item1:
-		 * 
-		 * break; }
-		 */
 		if (item.getItemId() != R.id.history)
 			editTextFunction.setText(item.getTitle());
 		return true;
 	}
+	
+	@Override
+	public void onActivityResult(int requestCode, int resultCode, Intent data) {
+	  super.onActivityResult(requestCode, resultCode, data);
+	  
+	  editTextFunction.setText(data.getStringExtra("formula"));
+	}	
 }

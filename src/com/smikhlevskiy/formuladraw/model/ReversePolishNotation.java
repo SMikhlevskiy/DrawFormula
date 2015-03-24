@@ -220,7 +220,9 @@ public class ReversePolishNotation {
 
 	}
 
-	// ------------------------------------------------------------------------
+	/*
+	 *  Compile textFormula to Reverse Polish Notation & Find Error
+	 */
 	public int compile() {
 		controlTextFormula();
 		divideLexschemas();
@@ -231,7 +233,7 @@ public class ReversePolishNotation {
 
 	}
 
-	// ---------------Вычисление значения------------------------
+	// ---------------Calckulation f(x)------------------------
 	public double cackulation(double x) {
 	try {
 		

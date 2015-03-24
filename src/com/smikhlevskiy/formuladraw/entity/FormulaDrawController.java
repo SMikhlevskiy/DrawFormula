@@ -3,8 +3,8 @@ package com.smikhlevskiy.formuladraw.entity;
 import android.content.Context;
 import android.widget.Toast;
 
+import com.smikhlevskiy.formuladraw.model.FormulaDrawBaseData;
 import com.smikhlevskiy.formuladraw.model.ReversePolishNotation;
-import com.smikhlevskiy.formuladraw.ui.FormulaDrawBaseData;
 import com.smikhlevskiy.formuladraw.ui.GraphicView;
 
 public class FormulaDrawController {
@@ -24,7 +24,7 @@ public class FormulaDrawController {
 		reversePolishNotation.compile();
 
 		graphicView.setReversePolishNotation(reversePolishNotation);
-		graphicView.setxMinMax(xStart, xEnd);
+		graphicView.setMinMax(xStart, xEnd);
 		graphicView.setDrawCustomCanvas(true);
 		graphicView.invalidate();
 	}

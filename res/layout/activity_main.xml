@@ -94,12 +94,25 @@
         android:layout_marginRight="10dp" >
     </com.smikhlevskiy.formuladraw.ui.GraphicView>
 
-    <Button
-        android:id="@+id/buttonRoot"
+    <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="10dp"
-        android:text="@string/findRoot" />
+        android:orientation="horizontal" >
+
+        <Button
+            android:id="@+id/buttonRoot"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:text="@string/findRoot" />
+
+        <Button
+            android:id="@+id/buttonSelectFormula"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:text="Выбор формулы" />
+    </LinearLayout>
 
     <LinearLayout
         android:layout_width="wrap_content"
