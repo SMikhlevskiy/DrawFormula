@@ -32,6 +32,9 @@
     <string name="item3">x*x+x</string>
     <string name="item4">x</string>
     <string name="item5">x*cos(x)</string>
-    <string name="history">история</string>
+    <string name="libraryFunctions">Библиотека функций</string>
+    <string name="addFunction">Вставить функцию</string>
+    <string name="loadFormula">Выбрать формулу</string>
+    <string name="saveFormula">Сохранить формулу</string>
 
 </resources>

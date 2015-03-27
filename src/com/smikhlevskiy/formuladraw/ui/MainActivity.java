@@ -33,9 +33,8 @@ public class MainActivity extends ActionBarActivity {
 	private Button buttonCalck;
 	private Button buttonDraw;
 	private Button buttonRoot;
-	private Button buttonSelectFormula;
 	public Button buttonUserReg;
-	private EditText editTextFunction;	
+	private EditText editTextFunction;
 	private EditText editTextXStart;
 	private EditText editTextXEnd;
 	private TextView textViewResult;
@@ -48,7 +47,9 @@ public class MainActivity extends ActionBarActivity {
 	private static final String APP_PREFERENCES_TEXTFormula = "formula";
 	private FormulaDrawController formulaDrawController;
 	MenuItem FDMenuItem[] = new MenuItem[5];
-	/**		Out information about current user
+
+	/**
+	 * Out information about current user
 	 * 
 	 */
 	private void drawUserInfo() {
@@ -63,34 +64,11 @@ public class MainActivity extends ActionBarActivity {
 		;
 
 	}
-	/**		Get user's old formulas and add they to History menu
-	 * 
-	 */
-	public void GetOldFormulas() {
-		ParseUser user = ParseUser.getCurrentUser();
-		if (user == null)
-			return;
 
-		ParseQuery<ParseObject> query = ParseQuery.getQuery("UserDatas");
-		query.whereEqualTo("user", user);
-		query.findInBackground(new FindCallback<ParseObject>() {
-			public void done(List<ParseObject> objects, ParseException e) {
-				if (e == null) {
-
-					for (int i = 0; i < 5; i++)
-						if (objects.size() - i - 1 >= 0) {
-							FDMenuItem[i].setTitle(objects.get(objects.size() - i - 1).getString("formula"));
-
-						}
-				} else {
-
-				}
-			}
-		});
-
+	private void drawGraphic() {
+		formulaDrawController.drawGraphic(graphicView, editTextFunction.getText().toString(), new Double(editTextXStart
+				.getText().toString()), new Double(editTextXEnd.getText().toString()));
 	}
-
-
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -104,7 +82,6 @@ public class MainActivity extends ActionBarActivity {
 		buttonDraw = (Button) findViewById(R.id.buttonDraw);
 		buttonRoot = (Button) findViewById(R.id.buttonRoot);
 		buttonUserReg = (Button) findViewById(R.id.buttonRegistration);
-		buttonSelectFormula = (Button) findViewById(R.id.buttonSelectFormula);
 
 		editTextFunction = (EditText) findViewById(R.id.editTextFormula);
 		textViewResult = (TextView) findViewById(R.id.textViewResult);
@@ -119,7 +96,6 @@ public class MainActivity extends ActionBarActivity {
 
 		formulaDrawPreferences = getSharedPreferences(APP_PREFERENCES, getApplicationContext().MODE_PRIVATE);
 		editTextFunction.setText(formulaDrawPreferences.getString(APP_PREFERENCES_TEXTFormula, "x*x+x"));
-
 
 		buttonRoot.setOnClickListener(new OnClickListener() {
 			@Override
@@ -145,19 +121,6 @@ public class MainActivity extends ActionBarActivity {
 			}
 
 		});
-		
-		/* -----Button User Registration form Set On ClickListener---------- */
-		buttonSelectFormula.setOnClickListener(new OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				
-				if (ParseUser.getCurrentUser() != null) {
-					startActivityForResult(new Intent(MainActivity.this, SelectFormulaActivity.class),CHOOSE_THIEF);				
-				} else Toast.makeText(MainActivity.this, "Зарегистрируйтись пожайлуста", Toast.LENGTH_LONG).show();
-
-			}
-
-		});
 
 
 		// --------------------------Draw Graphic-----------------
@@ -165,25 +128,12 @@ public class MainActivity extends ActionBarActivity {
 			@Override
 			public void onClick(View v) {
 
-				formulaDrawController.drawGraphic(graphicView, editTextFunction.getText().toString(), new Double(
-						editTextXStart.getText().toString()), new Double(editTextXEnd.getText().toString()));
-
-				ParseUser user = ParseUser.getCurrentUser();
-				if (user != null) {
-					// Make a new post
-					ParseObject post = new ParseObject("UserDatas");
-					post.put("formula", editTextFunction.getText().toString());
-					post.put("user", user);
-					post.saveInBackground();
-
-					GetOldFormulas();
-
-				}
+				drawGraphic();
 
 			}
 
 		});
-		//-------------------------Calckulator-----------------
+		// -------------------------Calckulator-----------------
 		buttonCalck.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
@@ -207,8 +157,7 @@ public class MainActivity extends ActionBarActivity {
 	@Override
 	public void onWindowFocusChanged(boolean hasFocus) {
 		if (prFirstFocus) {
-			formulaDrawController.drawGraphic(graphicView, editTextFunction.getText().toString(), new Double(
-					editTextXStart.getText().toString()), new Double(editTextXEnd.getText().toString()));
+			drawGraphic();
 
 		}
 		prFirstFocus = false;
@@ -232,7 +181,6 @@ public class MainActivity extends ActionBarActivity {
 	@Override
 	protected void onResume() {
 		drawUserInfo();// Draw user info after closing Registration form
-		GetOldFormulas();
 		super.onResume();
 
 	}
@@ -242,30 +190,55 @@ public class MainActivity extends ActionBarActivity {
 
 		getMenuInflater().inflate(R.menu.main, menu);
 
-		FDMenuItem[0] = menu.findItem(R.id.item1);
-
-		FDMenuItem[1] = menu.findItem(R.id.item2);
-		FDMenuItem[2] = menu.findItem(R.id.item3);
-		FDMenuItem[3] = menu.findItem(R.id.item4);
-		FDMenuItem[4] = menu.findItem(R.id.item5);
-		GetOldFormulas();
-
-
 		return true;
 
 	}
 
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
-		if (item.getItemId() != R.id.history)
-			editTextFunction.setText(item.getTitle());
+
+		switch (item.getItemId()) {
+		case R.id.libraryFunctions: {
+			break;
+		}
+		case R.id.loadFormula: {
+			if (ParseUser.getCurrentUser() != null) {
+				startActivityForResult(new Intent(MainActivity.this, SelectFormulaActivity.class), CHOOSE_THIEF);
+			} else
+				Toast.makeText(MainActivity.this, "Зарегистрируйтись пожайлуста", Toast.LENGTH_LONG).show();
+
+			break;
+		}
+		case R.id.addFunction: {
+			break;
+		}
+		case R.id.saveFormula: {
+			ParseUser user = ParseUser.getCurrentUser();
+			if (user != null) {
+
+				ParseObject post = new ParseObject("UserDatas");
+				post.put("formula", editTextFunction.getText().toString());
+				post.put("user", user);
+				post.saveInBackground();
+
+			}
+
+			break;
+		}
+		default:
+			break;
+
+		}
+
 		return true;
 	}
-	
+
 	@Override
 	public void onActivityResult(int requestCode, int resultCode, Intent data) {
-	  super.onActivityResult(requestCode, resultCode, data);
-	  
-	  editTextFunction.setText(data.getStringExtra("formula"));
-	}	
+		super.onActivityResult(requestCode, resultCode, data);
+		if (data != null) {
+			editTextFunction.setText(data.getStringExtra("formula"));
+			drawGraphic();
+		}
+	}
 }
