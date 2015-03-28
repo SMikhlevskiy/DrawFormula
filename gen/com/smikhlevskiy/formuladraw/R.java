@@ -1889,6 +1889,7 @@ containing a value of this type.
         public static final int errorLogin=0x7f0a0023;
         public static final int errorPassword=0x7f0a0024;
         public static final int findRoot=0x7f0a0018;
+        public static final int inputNameFormula=0x7f0a0033;
         public static final int item1=0x7f0a002a;
         public static final int item2=0x7f0a002b;
         public static final int item3=0x7f0a002c;

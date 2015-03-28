@@ -2,14 +2,13 @@ package com.smikhlevskiy.formuladraw.model;
 
 import java.util.ArrayList;
 
-
-
-enum TypeLex {
-	OPERATOR, OPEN_BRACE, CLOSE_BRACE, DIGITAL, FUNCTION
-};
+import com.smikhlevskiy.formuladraw.util.FDConstants;
 
 enum TypeFunction {
 	SIN, COS, XVALUE, ERROR
+};
+enum TypeLex {
+	OPERATOR, OPEN_BRACE, CLOSE_BRACE, DIGITAL, FUNCTION
 };
 
 public class ReversePolishNotation {
@@ -90,8 +89,6 @@ public class ReversePolishNotation {
 
 	// --------------------------Проверка текста формулы---------------------
 	private void controlTextFormula() {
-		
-		
 
 	}
 
@@ -221,7 +218,7 @@ public class ReversePolishNotation {
 	}
 
 	/*
-	 *  Compile textFormula to Reverse Polish Notation & Find Error
+	 * Compile textFormula to Reverse Polish Notation & Find Error
 	 */
 	public int compile() {
 		controlTextFormula();
@@ -235,80 +232,78 @@ public class ReversePolishNotation {
 
 	// ---------------Calckulation f(x)------------------------
 	public double cackulation(double x) {
-	try {
-		
-		if (lexPolish == null)
-			return 0;
+		try {
 
-		ArrayList<Double> valueStack = new ArrayList();
+			if (lexPolish == null)
+				return 0;
 
-		for (int i = 0; i < lexPolish.size(); i++) {
+			ArrayList<Double> valueStack = new ArrayList();
 
-			if (lexPolish.get(i).typ == TypeLex.DIGITAL) {
-				valueStack.add(new Double(lexPolish.get(i).value));
-				continue;
-			}
-			if (lexPolish.get(i).typ == TypeLex.FUNCTION) {
+			for (int i = 0; i < lexPolish.size(); i++) {
 
-				switch (lexPolish.get(i).typeFunction) {
-				case SIN:
-					valueStack.set(valueStack.size() - 1, Math.sin(valueStack.get(valueStack.size() - 1)));
-					break;
-				case COS:
-					valueStack.set(valueStack.size() - 1, Math.cos(valueStack.get(valueStack.size() - 1)));
-
-					break;
-				case XVALUE:
-					valueStack.add(new Double(x));
+				if (lexPolish.get(i).typ == TypeLex.DIGITAL) {
+					valueStack.add(new Double(lexPolish.get(i).value));
 					continue;
-
-				default:
-					throw (new ArithmeticException());// unknown function
 				}
-			}
+				if (lexPolish.get(i).typ == TypeLex.FUNCTION) {
 
-			if (lexPolish.get(i).typ == TypeLex.OPERATOR) {
-				switch (lexPolish.get(i).operator) {
-				case '/':
-					if (valueStack.get(valueStack.size() - 1)==0.0) throw new ArithmeticException();  
-					
-					valueStack.set(valueStack.size() - 2,
-							new Double(valueStack.get(valueStack.size() - 2) / valueStack.get(valueStack.size() - 1)));
+					switch (lexPolish.get(i).typeFunction) {
+					case SIN:
+						valueStack.set(valueStack.size() - 1, Math.sin(valueStack.get(valueStack.size() - 1)));
+						break;
+					case COS:
+						valueStack.set(valueStack.size() - 1, Math.cos(valueStack.get(valueStack.size() - 1)));
 
-					break;
-				case '*':
-					valueStack.set(valueStack.size() - 2,
-							new Double(valueStack.get(valueStack.size() - 2) * valueStack.get(valueStack.size() - 1)));
-					break;
-				case '+':
-					valueStack.set(valueStack.size() - 2,
-							new Double(valueStack.get(valueStack.size() - 2) + valueStack.get(valueStack.size() - 1)));
-					break;
-				case '-':
-					valueStack.set(valueStack.size() - 2,
-							new Double(valueStack.get(valueStack.size() - 2) - valueStack.get(valueStack.size() - 1)));
-					break;
+						break;
+					case XVALUE:
+						valueStack.add(new Double(x));
+						continue;
 
-				default:
-					break;
-
+					default:
+						throw (new ArithmeticException());// unknown function
+					}
 				}
-				valueStack.remove(valueStack.size() - 1);
-				continue;
-			}
 
+				if (lexPolish.get(i).typ == TypeLex.OPERATOR) {
+					switch (lexPolish.get(i).operator) {
+					case '/':
+						if (valueStack.get(valueStack.size() - 1) == 0.0)
+							throw new ArithmeticException();
+
+						valueStack.set(valueStack.size() - 2, new Double(valueStack.get(valueStack.size() - 2)
+								/ valueStack.get(valueStack.size() - 1)));
+
+						break;
+					case '*':
+						valueStack.set(valueStack.size() - 2, new Double(valueStack.get(valueStack.size() - 2)
+								* valueStack.get(valueStack.size() - 1)));
+						break;
+					case '+':
+						valueStack.set(valueStack.size() - 2, new Double(valueStack.get(valueStack.size() - 2)
+								+ valueStack.get(valueStack.size() - 1)));
+						break;
+					case '-':
+						valueStack.set(valueStack.size() - 2, new Double(valueStack.get(valueStack.size() - 2)
+								- valueStack.get(valueStack.size() - 1)));
+						break;
+
+					default:
+						break;
+
+					}
+					valueStack.remove(valueStack.size() - 1);
+					continue;
+				}
+
+			}
+			if (valueStack.size() > 0)
+				return valueStack.get(valueStack.size() - 1);
+
+			return 0;// error
+		} catch (ArithmeticException e) {
+
+			throw e;
 		}
-		if (valueStack.size() > 0)
-			return valueStack.get(valueStack.size() - 1);
-
-		return 0;// error
-	}
-		catch (ArithmeticException e) {
-
-			
-			
-			throw e;	
-			}
 
 	}
 

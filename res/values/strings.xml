@@ -14,8 +14,8 @@
     <string name="logOut">Выход</string>
     <string name="login">"Логин"</string>
     <string name="password">"Пароль"</string>
-    <string name="oK">"OK"</string>
-    <string name="cansel">"Cansel"</string>
+    <string name="oK">"Да"</string>
+    <string name="cansel">"Отмена"</string>
     <string name="newUser">"Новый пользователь"</string>
     <string name="eMail">"E-mail"</string>
     <string name="regOK">"Пользователь успешно зарегистрирован""</string>
@@ -36,5 +36,6 @@
     <string name="addFunction">Вставить функцию</string>
     <string name="loadFormula">Выбрать формулу</string>
     <string name="saveFormula">Сохранить формулу</string>
+    <string name="inputNameFormula">Введите имя формулы</string>
 
 </resources>

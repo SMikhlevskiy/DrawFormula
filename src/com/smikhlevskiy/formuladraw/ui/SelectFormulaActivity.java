@@ -13,7 +13,6 @@ import android.widget.ListView;
 import android.widget.Toast;
 
 import com.parse.FindCallback;
-import com.parse.Parse;
 import com.parse.ParseException;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
@@ -21,17 +20,26 @@ import com.parse.ParseUser;
 import com.smikhlevskiy.formuladraw.R;
 import com.smikhlevskiy.formuladraw.adapters.SelectFormulaAdapter;
 import com.smikhlevskiy.formuladraw.model.SelectFormulaItem;
+import com.smikhlevskiy.formuladraw.util.FDConstants;
 
 public class SelectFormulaActivity extends Activity {
-	static final private int CHOOSE_THIEF = 0;
-	SelectFormulaAdapter itemAdapter;
-	ListView lstView;
-	Button buttonCansel;
+	//static final private int CHOOSE_THIEF = 0;
+
+	
+	private SelectFormulaAdapter itemAdapter;
+	private ListView lstView;
+	private Button buttonCansel;
+	private  int typeSelect=FDConstants.LOAD_FORMULA;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_selectformula);
+		
+		Bundle extras = getIntent().getExtras();
+		if (extras != null) {
+			typeSelect = extras.getInt("typeSelect");
+		}
 		
 		buttonCansel=(Button)findViewById(R.id.buttonCansel);
 		lstView = (ListView) findViewById(R.id.lv_list);
@@ -55,8 +63,17 @@ public class SelectFormulaActivity extends Activity {
 			public void done(List<ParseObject> objects, ParseException e) {
 				if (e == null) {
 					ArrayList<SelectFormulaItem> aList = new ArrayList<SelectFormulaItem>();
+					
+					if (typeSelect==FDConstants.ADD_FUNCTION){
+						for (int i=0;i<FDConstants.AVAILABLE_FUNCTIONS.length;i++){
+							aList.add(new SelectFormulaItem(FDConstants.AVAILABLE_FUNCTIONS[i],FDConstants.AVAILABLE_FUNCTIONS[i]+"(x)"));
+						}
+							
+					}
+							
+					
 					for (int i = objects.size() - 1; i >= 0; i--) {
-						aList.add(new SelectFormulaItem("Title " + i, objects.get(i).getString("formula")));
+						aList.add(new SelectFormulaItem(objects.get(i).getString("name"), objects.get(i).getString("formula")));
 					}
 					itemAdapter = new SelectFormulaAdapter(SelectFormulaActivity.this, R.layout.item_selectformula, aList);
 					lstView.setAdapter(itemAdapter);

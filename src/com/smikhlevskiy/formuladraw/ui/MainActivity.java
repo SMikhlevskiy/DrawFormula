@@ -3,6 +3,7 @@ package com.smikhlevskiy.formuladraw.ui;
 import java.util.List;
 
 import com.smikhlevskiy.formuladraw.ui.UserRegActivity;
+import com.smikhlevskiy.formuladraw.util.FDConstants;
 import com.parse.FindCallback;
 import com.parse.ParseException;
 import com.parse.ParseObject;
@@ -12,6 +13,8 @@ import com.smikhlevskiy.formuladraw.entity.FormulaDrawController;
 import com.smikhlevskiy.formuladraw.model.FindRoot;
 import com.smikhlevskiy.formuladraw.R;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -29,7 +32,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 public class MainActivity extends ActionBarActivity {
-	static final private int CHOOSE_THIEF = 0;
+
 	private Button buttonCalck;
 	private Button buttonDraw;
 	private Button buttonRoot;
@@ -43,10 +46,23 @@ public class MainActivity extends ActionBarActivity {
 	private boolean prFirstFocus = true;
 	private SharedPreferences formulaDrawPreferences;
 
-	private static final String APP_PREFERENCES = "formuladrawpreferences";
-	private static final String APP_PREFERENCES_TEXTFormula = "formula";
 	private FormulaDrawController formulaDrawController;
 	MenuItem FDMenuItem[] = new MenuItem[5];
+
+	private void saveWorkspace() {
+		SharedPreferences.Editor editor = formulaDrawPreferences.edit();
+		editor.putString(FDConstants.APP_PREFERENCES_TEXTFormula, editTextFunction.getText().toString());
+		editor.commit();
+	}
+
+	 private void startSelectFormulaActivity(int typeSelect) {
+		if (ParseUser.getCurrentUser() != null) {
+			Intent intent = new Intent(MainActivity.this, SelectFormulaActivity.class);
+			intent.putExtra("typeSelect", typeSelect);
+			startActivityForResult(intent, typeSelect);
+		} else
+			Toast.makeText(MainActivity.this, "Зарегистрируйтись пожайлуста", Toast.LENGTH_LONG).show();
+	}
 
 	/**
 	 * Out information about current user
@@ -94,8 +110,9 @@ public class MainActivity extends ActionBarActivity {
 		bar.setDisplayShowHomeEnabled(true);
 		bar.setIcon(R.drawable.ic_launcher);
 
-		formulaDrawPreferences = getSharedPreferences(APP_PREFERENCES, getApplicationContext().MODE_PRIVATE);
-		editTextFunction.setText(formulaDrawPreferences.getString(APP_PREFERENCES_TEXTFormula, "x*x+x"));
+		formulaDrawPreferences = getSharedPreferences(FDConstants.APP_PREFERENCES, getApplicationContext().MODE_PRIVATE);
+
+		editTextFunction.setText(formulaDrawPreferences.getString(FDConstants.APP_PREFERENCES_TEXTFormula, "x*x+x"));
 
 		buttonRoot.setOnClickListener(new OnClickListener() {
 			@Override
@@ -121,7 +138,6 @@ public class MainActivity extends ActionBarActivity {
 			}
 
 		});
-
 
 		// --------------------------Draw Graphic-----------------
 		buttonDraw.setOnClickListener(new OnClickListener() {
@@ -170,9 +186,7 @@ public class MainActivity extends ActionBarActivity {
 	protected void onPause() {
 		// Save text formula
 		// formulaDrawController.saveFormula(editTextFunction.getText().toString());
-		SharedPreferences.Editor editor = formulaDrawPreferences.edit();
-		editor.putString(APP_PREFERENCES_TEXTFormula, editTextFunction.getText().toString());
-		editor.commit();
+		saveWorkspace();
 
 		super.onPause();
 
@@ -202,24 +216,49 @@ public class MainActivity extends ActionBarActivity {
 			break;
 		}
 		case R.id.loadFormula: {
-			if (ParseUser.getCurrentUser() != null) {
-				startActivityForResult(new Intent(MainActivity.this, SelectFormulaActivity.class), CHOOSE_THIEF);
-			} else
-				Toast.makeText(MainActivity.this, "Зарегистрируйтись пожайлуста", Toast.LENGTH_LONG).show();
+			startSelectFormulaActivity(FDConstants.LOAD_FORMULA);
 
 			break;
 		}
 		case R.id.addFunction: {
+			startSelectFormulaActivity(FDConstants.ADD_FUNCTION);
+
 			break;
 		}
 		case R.id.saveFormula: {
 			ParseUser user = ParseUser.getCurrentUser();
 			if (user != null) {
 
-				ParseObject post = new ParseObject("UserDatas");
-				post.put("formula", editTextFunction.getText().toString());
-				post.put("user", user);
-				post.saveInBackground();
+				final EditText editTextAlertDialog = new EditText(this);
+
+				editTextAlertDialog.setText("UserFunc");
+
+				new AlertDialog.Builder(this)
+
+				.setTitle(getString(R.string.saveFormula)).setMessage(getString(R.string.inputNameFormula))
+						.setView(editTextAlertDialog)
+						.setPositiveButton(getString(R.string.oK), new DialogInterface.OnClickListener() {
+							public void onClick(DialogInterface dialog, int whichButton) {
+								ParseUser user = ParseUser.getCurrentUser();
+								ParseObject post = new ParseObject("UserDatas");
+								post.put("formula", editTextFunction.getText().toString());
+								post.put("name", editTextAlertDialog.getText().toString());
+								post.put("user", user);
+								post.saveInBackground();
+
+							}
+
+						})
+
+						.setNegativeButton(getString(R.string.cansel), new DialogInterface.OnClickListener() {
+
+							public void onClick(DialogInterface dialog, int whichButton) {
+
+							}
+
+						})
+
+						.show();
 
 			}
 
@@ -235,10 +274,15 @@ public class MainActivity extends ActionBarActivity {
 
 	@Override
 	public void onActivityResult(int requestCode, int resultCode, Intent data) {
-		super.onActivityResult(requestCode, resultCode, data);
+
 		if (data != null) {
-			editTextFunction.setText(data.getStringExtra("formula"));
+			if (requestCode == FDConstants.ADD_FUNCTION)
+				editTextFunction.setText(editTextFunction.getText() + data.getStringExtra("name") + "(x)");
+			else if (requestCode == FDConstants.LOAD_FORMULA)
+				editTextFunction.setText(data.getStringExtra("formula"));
+
 			drawGraphic();
 		}
+		super.onActivityResult(requestCode, resultCode, data);
 	}
 }

@@ -518,6 +518,7 @@ int string errorEmail 0x7f0a0025
 int string errorLogin 0x7f0a0023
 int string errorPassword 0x7f0a0024
 int string findRoot 0x7f0a0018
+int string inputNameFormula 0x7f0a0033
 int string item1 0x7f0a002a
 int string item2 0x7f0a002b
 int string item3 0x7f0a002c

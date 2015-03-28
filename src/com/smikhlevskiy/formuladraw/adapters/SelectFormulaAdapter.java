@@ -55,6 +55,7 @@ public class SelectFormulaAdapter extends ArrayAdapter<SelectFormulaItem> {
 				
 				Intent answerInent = new Intent();
 				answerInent.putExtra("formula",gholder.txtSubTitle.getText().toString());
+				answerInent.putExtra("name",gholder.txtMainTitle.getText().toString());
 				((Activity)context).setResult(1,answerInent);
 				((Activity)context).finish();
 			}
