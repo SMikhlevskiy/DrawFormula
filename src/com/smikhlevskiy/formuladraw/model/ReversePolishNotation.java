@@ -4,9 +4,6 @@ import java.util.ArrayList;
 
 import com.smikhlevskiy.formuladraw.util.FDConstants;
 
-enum TypeFunction {
-	SIN, COS, XVALUE, ERROR
-};
 enum TypeLex {
 	OPERATOR, OPEN_BRACE, CLOSE_BRACE, DIGITAL, FUNCTION
 };
@@ -44,7 +41,7 @@ public class ReversePolishNotation {
 
 	private class Lexschema {
 		public TypeLex typ;
-		public TypeFunction typeFunction;
+		public FDConstants.TypeFunction typeFunction;
 		public char operator;
 		double value;
 
@@ -61,7 +58,7 @@ public class ReversePolishNotation {
 			this.operator = ' ';
 		}
 
-		public Lexschema(TypeLex typ, TypeFunction typeFunction) {
+		public Lexschema(TypeLex typ, FDConstants.TypeFunction typeFunction) {
 			super();
 			this.typ = typ;
 			this.typeFunction = typeFunction;
@@ -76,15 +73,14 @@ public class ReversePolishNotation {
 
 	}
 
-	private TypeFunction textToFunction(String text) {
-		if (text.equals("sin"))
-			return TypeFunction.SIN;
-		if (text.equals("cos"))
-			return TypeFunction.COS;
-		if (text.equals("x"))
-			return TypeFunction.XVALUE;
+	public FDConstants.TypeFunction textToFunction(String text) {
 
-		return TypeFunction.ERROR;
+		for (int i = 0; i < FDConstants.AVAILABLE_FUNCTIONS.length; i++)
+			if (text.equals(FDConstants.AVAILABLE_FUNCTIONS[i][0]))
+				return FDConstants.TypeFunction.values()[i];
+
+		return FDConstants.TypeFunction.ERROR;		
+
 	}
 
 	// --------------------------Проверка текста формулы---------------------
@@ -247,17 +243,65 @@ public class ReversePolishNotation {
 				}
 				if (lexPolish.get(i).typ == TypeLex.FUNCTION) {
 
-					switch (lexPolish.get(i).typeFunction) {
-					case SIN:
-						valueStack.set(valueStack.size() - 1, Math.sin(valueStack.get(valueStack.size() - 1)));
-						break;
-					case COS:
-						valueStack.set(valueStack.size() - 1, Math.cos(valueStack.get(valueStack.size() - 1)));
 
-						break;
+					switch (lexPolish.get(i).typeFunction) {
 					case XVALUE:
 						valueStack.add(new Double(x));
 						continue;
+					case Pi:
+						valueStack.add(Math.PI);
+						continue;
+					case E:
+						valueStack.add(Math.E);
+						continue;
+
+					case abs:
+						valueStack.set(valueStack.size() - 1, Math.abs(valueStack.get(valueStack.size() - 1)));
+						break;
+					case asin:
+						valueStack.set(valueStack.size() - 1, Math.asin(valueStack.get(valueStack.size() - 1)));
+						break;
+					case acos:
+						valueStack.set(valueStack.size() - 1, Math.acos(valueStack.get(valueStack.size() - 1)));
+						break;
+					case atan:
+						valueStack.set(valueStack.size() - 1, Math.atan(valueStack.get(valueStack.size() - 1)));
+						break;
+					case cbrt:
+						valueStack.set(valueStack.size() - 1, Math.cbrt(valueStack.get(valueStack.size() - 1)));
+						break;						
+					case cos:
+						valueStack.set(valueStack.size() - 1, Math.cos(valueStack.get(valueStack.size() - 1)));
+						break;						
+					case exp:
+						valueStack.set(valueStack.size() - 1, Math.exp(valueStack.get(valueStack.size() - 1)));
+						break;
+					case log:
+						valueStack.set(valueStack.size() - 1, Math.log(valueStack.get(valueStack.size() - 1)));
+						break;						
+					case log10:
+						valueStack.set(valueStack.size() - 1, Math.atan(valueStack.get(valueStack.size() - 1)));
+						break;
+					case pow:
+						valueStack.set(valueStack.size() - 1, Math.pow(valueStack.get(valueStack.size() - 1),2));
+						break;						
+					case random:
+						valueStack.set(valueStack.size() - 1, valueStack.get(valueStack.size() - 1)*Math.random());
+						break;
+					case sin:
+						valueStack.set(valueStack.size() - 1, Math.sin(valueStack.get(valueStack.size() - 1)));
+						break;
+					case sqrt:
+						valueStack.set(valueStack.size() - 1, Math.sqrt(valueStack.get(valueStack.size() - 1)));
+						break;
+					case tan:
+						valueStack.set(valueStack.size() - 1, Math.tan(valueStack.get(valueStack.size() - 1)));
+						break;						
+						
+						
+						
+
+					
 
 					default:
 						throw (new ArithmeticException());// unknown function

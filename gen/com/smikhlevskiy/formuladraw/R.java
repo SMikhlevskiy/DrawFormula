@@ -1674,6 +1674,7 @@ containing a value of this type.
         public static final int action_mode_close_button=0x7f090020;
         public static final int activity_chooser_view_content=0x7f090021;
         public static final int addFunction=0x7f090067;
+        public static final int addUserFunction=0x7f090068;
         public static final int always=0x7f090014;
         public static final int beginning=0x7f09001b;
         public static final int butCansel=0x7f090054;
@@ -1715,7 +1716,7 @@ containing a value of this type.
         public static final int libraryFunctions=0x7f090066;
         public static final int listMode=0x7f09000a;
         public static final int list_item=0x7f090025;
-        public static final int loadFormula=0x7f090068;
+        public static final int loadFormula=0x7f090069;
         public static final int lv_list=0x7f09004c;
         public static final int middle=0x7f09001d;
         public static final int never=0x7f090017;
@@ -1724,7 +1725,7 @@ containing a value of this type.
         public static final int progress_circular=0x7f090007;
         public static final int progress_horizontal=0x7f090008;
         public static final int radio=0x7f09002b;
-        public static final int saveFormula=0x7f090069;
+        public static final int saveFormula=0x7f09006a;
         public static final int search_badge=0x7f090035;
         public static final int search_bar=0x7f090034;
         public static final int search_button=0x7f090036;
@@ -1879,6 +1880,7 @@ containing a value of this type.
         public static final int abc_toolbar_collapse_description=0x7f0a0004;
         public static final int action_settings=0x7f0a0011;
         public static final int addFunction=0x7f0a0030;
+        public static final int addUserFunction=0x7f0a0031;
         public static final int app_name=0x7f0a0010;
         public static final int beginGraph=0x7f0a0016;
         public static final int cansel=0x7f0a001e;
@@ -1889,14 +1891,14 @@ containing a value of this type.
         public static final int errorLogin=0x7f0a0023;
         public static final int errorPassword=0x7f0a0024;
         public static final int findRoot=0x7f0a0018;
-        public static final int inputNameFormula=0x7f0a0033;
+        public static final int inputNameFormula=0x7f0a0034;
         public static final int item1=0x7f0a002a;
         public static final int item2=0x7f0a002b;
         public static final int item3=0x7f0a002c;
         public static final int item4=0x7f0a002d;
         public static final int item5=0x7f0a002e;
         public static final int libraryFunctions=0x7f0a002f;
-        public static final int loadFormula=0x7f0a0031;
+        public static final int loadFormula=0x7f0a0032;
         public static final int logOut=0x7f0a001a;
         public static final int login=0x7f0a001b;
         public static final int mathError=0x7f0a0012;
@@ -1906,10 +1908,11 @@ containing a value of this type.
         public static final int notRegistredUser=0x7f0a0028;
         public static final int oK=0x7f0a001d;
         public static final int password=0x7f0a001c;
+        public static final int pleaseReg=0x7f0a0035;
         public static final int regBad=0x7f0a0022;
         public static final int regOK=0x7f0a0021;
         public static final int registration=0x7f0a0019;
-        public static final int saveFormula=0x7f0a0032;
+        public static final int saveFormula=0x7f0a0033;
         public static final int startFormula=0x7f0a0014;
         public static final int textFormula=0x7f0a0013;
         public static final int user=0x7f0a0029;

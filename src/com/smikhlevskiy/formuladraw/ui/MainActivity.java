@@ -11,6 +11,7 @@ import com.parse.ParseQuery;
 import com.parse.ParseUser;
 import com.smikhlevskiy.formuladraw.entity.FormulaDrawController;
 import com.smikhlevskiy.formuladraw.model.FindRoot;
+import com.smikhlevskiy.formuladraw.model.ReversePolishNotation;
 import com.smikhlevskiy.formuladraw.R;
 
 import android.app.AlertDialog;
@@ -36,7 +37,7 @@ public class MainActivity extends ActionBarActivity {
 	private Button buttonCalck;
 	private Button buttonDraw;
 	private Button buttonRoot;
-	public Button buttonUserReg;
+	private Button buttonUserReg;
 	private EditText editTextFunction;
 	private EditText editTextXStart;
 	private EditText editTextXEnd;
@@ -49,19 +50,28 @@ public class MainActivity extends ActionBarActivity {
 	private FormulaDrawController formulaDrawController;
 	MenuItem FDMenuItem[] = new MenuItem[5];
 
+	/**
+	 * Save state Workspace in Preferces: formulas and min/max
+	 */
 	private void saveWorkspace() {
 		SharedPreferences.Editor editor = formulaDrawPreferences.edit();
 		editor.putString(FDConstants.APP_PREFERENCES_TEXTFormula, editTextFunction.getText().toString());
 		editor.commit();
 	}
 
-	 private void startSelectFormulaActivity(int typeSelect) {
+	/**
+	 * ------------Start Activity SelectFormula-------------
+	 * 
+	 * @param typeSelect
+	 *            - AddFunction or LoadFormula
+	 */
+	private void startSelectFormulaActivity(int typeSelect) {
 		if (ParseUser.getCurrentUser() != null) {
 			Intent intent = new Intent(MainActivity.this, SelectFormulaActivity.class);
 			intent.putExtra("typeSelect", typeSelect);
 			startActivityForResult(intent, typeSelect);
 		} else
-			Toast.makeText(MainActivity.this, "Зарегистрируйтись пожайлуста", Toast.LENGTH_LONG).show();
+			Toast.makeText(MainActivity.this, getString(R.string.pleaseReg), Toast.LENGTH_LONG).show();
 	}
 
 	/**
@@ -81,6 +91,9 @@ public class MainActivity extends ActionBarActivity {
 
 	}
 
+	/**
+	 * Draw Graphic On screen
+	 */
 	private void drawGraphic() {
 		formulaDrawController.drawGraphic(graphicView, editTextFunction.getText().toString(), new Double(editTextXStart
 				.getText().toString()), new Double(editTextXEnd.getText().toString()));
@@ -225,6 +238,12 @@ public class MainActivity extends ActionBarActivity {
 
 			break;
 		}
+		case R.id.addUserFunction: {
+			startSelectFormulaActivity(FDConstants.ADD_USER_FUNCTION);
+
+			break;
+		}
+
 		case R.id.saveFormula: {
 			ParseUser user = ParseUser.getCurrentUser();
 			if (user != null) {
@@ -276,9 +295,17 @@ public class MainActivity extends ActionBarActivity {
 	public void onActivityResult(int requestCode, int resultCode, Intent data) {
 
 		if (data != null) {
-			if (requestCode == FDConstants.ADD_FUNCTION)
-				editTextFunction.setText(editTextFunction.getText() + data.getStringExtra("name") + "(x)");
-			else if (requestCode == FDConstants.LOAD_FORMULA)
+			if ((requestCode == FDConstants.ADD_FUNCTION) || (requestCode == FDConstants.ADD_USER_FUNCTION)) {
+				String textFormula = data.getStringExtra("name").toLowerCase();
+				ReversePolishNotation rpn = new ReversePolishNotation();
+				rpn.setFormula(textFormula);
+				if ((rpn.textToFunction(textFormula) == FDConstants.TypeFunction.XVALUE)
+						|| (rpn.textToFunction(textFormula) == FDConstants.TypeFunction.E)
+						|| (rpn.textToFunction(textFormula) == FDConstants.TypeFunction.Pi))
+					editTextFunction.setText(editTextFunction.getText() + textFormula);
+				else
+					editTextFunction.setText(editTextFunction.getText() + textFormula + "(x)");
+			} else if (requestCode == FDConstants.LOAD_FORMULA)
 				editTextFunction.setText(data.getStringExtra("formula"));
 
 			drawGraphic();

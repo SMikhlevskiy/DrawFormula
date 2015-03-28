@@ -33,9 +33,13 @@
     <string name="item4">x</string>
     <string name="item5">x*cos(x)</string>
     <string name="libraryFunctions">Библиотека функций</string>
+    
     <string name="addFunction">Вставить функцию</string>
-    <string name="loadFormula">Выбрать формулу</string>
+    <string name="addUserFunction">Вставить сохраненную функцию</string>    
+    <string name="loadFormula">Вставить сохраненную формулу</string>
     <string name="saveFormula">Сохранить формулу</string>
+    
     <string name="inputNameFormula">Введите имя формулы</string>
+    <string name="pleaseReg">Зарегистрируйтись пожайлуста</string>
 
 </resources>

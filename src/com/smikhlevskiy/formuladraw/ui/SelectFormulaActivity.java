@@ -23,27 +23,26 @@ import com.smikhlevskiy.formuladraw.model.SelectFormulaItem;
 import com.smikhlevskiy.formuladraw.util.FDConstants;
 
 public class SelectFormulaActivity extends Activity {
-	//static final private int CHOOSE_THIEF = 0;
+	// static final private int CHOOSE_THIEF = 0;
 
-	
 	private SelectFormulaAdapter itemAdapter;
 	private ListView lstView;
 	private Button buttonCansel;
-	private  int typeSelect=FDConstants.LOAD_FORMULA;
+	private int typeSelect = FDConstants.LOAD_FORMULA;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_selectformula);
-		
+
 		Bundle extras = getIntent().getExtras();
 		if (extras != null) {
 			typeSelect = extras.getInt("typeSelect");
 		}
-		
-		buttonCansel=(Button)findViewById(R.id.buttonCansel);
+
+		buttonCansel = (Button) findViewById(R.id.buttonCansel);
 		lstView = (ListView) findViewById(R.id.lv_list);
-		
+
 		buttonCansel.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
@@ -52,9 +51,9 @@ public class SelectFormulaActivity extends Activity {
 		});
 
 		ParseQuery<ParseObject> query = ParseQuery.getQuery("UserDatas");
-		//query.whereExists("user");// for All user
-		//query.orderByAscending("user");
-		
+		// query.whereExists("user");// for All user
+		// query.orderByAscending("user");
+
 		ParseUser user = ParseUser.getCurrentUser();
 		query.whereEqualTo("user", user);
 		query.setLimit(1000);
@@ -63,23 +62,26 @@ public class SelectFormulaActivity extends Activity {
 			public void done(List<ParseObject> objects, ParseException e) {
 				if (e == null) {
 					ArrayList<SelectFormulaItem> aList = new ArrayList<SelectFormulaItem>();
-					
-					if (typeSelect==FDConstants.ADD_FUNCTION){
-						for (int i=0;i<FDConstants.AVAILABLE_FUNCTIONS.length;i++){
-							aList.add(new SelectFormulaItem(FDConstants.AVAILABLE_FUNCTIONS[i],FDConstants.AVAILABLE_FUNCTIONS[i]+"(x)"));
+
+					if (typeSelect == FDConstants.ADD_FUNCTION) {
+						for (int i = 0; i < FDConstants.AVAILABLE_FUNCTIONS.length; i++) {
+							aList.add(new SelectFormulaItem(FDConstants.AVAILABLE_FUNCTIONS[i][0],
+									FDConstants.AVAILABLE_FUNCTIONS[i][0] + "(x) - "
+											+ FDConstants.AVAILABLE_FUNCTIONS[i][1]));
 						}
-							
-					}
-							
-					
-					for (int i = objects.size() - 1; i >= 0; i--) {
-						aList.add(new SelectFormulaItem(objects.get(i).getString("name"), objects.get(i).getString("formula")));
-					}
-					itemAdapter = new SelectFormulaAdapter(SelectFormulaActivity.this, R.layout.item_selectformula, aList);
+
+					} else
+
+						for (int i = objects.size() - 1; i >= 0; i--) {
+							aList.add(new SelectFormulaItem(objects.get(i).getString("name"), objects.get(i).getString(
+									"formula")));
+						}
+					itemAdapter = new SelectFormulaAdapter(SelectFormulaActivity.this, R.layout.item_selectformula,
+							aList);
 					lstView.setAdapter(itemAdapter);
 
 				} else {
-					
+
 					Toast.makeText(SelectFormulaActivity.this,
 							"Чтение списка формул невозможно. Нет связи с Облачным хранилищем Parse.com",
 							Toast.LENGTH_LONG).show();
