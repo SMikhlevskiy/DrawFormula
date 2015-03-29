@@ -23,9 +23,7 @@ public class ScaleCoordinates {
 	}
 
 	public float getDpY(double fY) {
-		// double yi1 = 1.0 * this.getHeight() - 1.0 * (y1 - yMin) *
-		// this.getHeight() / (yMax - yMin);
-
+	
 		if (fromDownToUp)
 			return (float) (dpYStart + dpHeight - dpHeight * (fY - fYStart) / fHeight);
 		else

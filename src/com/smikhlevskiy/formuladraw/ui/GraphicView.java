@@ -1,7 +1,11 @@
 package com.smikhlevskiy.formuladraw.ui;
 
+/**
+ * Draw Graphic on View
+ * 
+ */
 import com.smikhlevskiy.formuladraw.model.ReversePolishNotation;
-import com.smikhlevskiy.formuladraw.util.ScaleСoordinates;
+import com.smikhlevskiy.formuladraw.util.ScaleCoordinates;
 
 import android.content.Context;
 import android.graphics.Canvas;
@@ -20,14 +24,19 @@ public class GraphicView extends View {
 	private Double xMax = 0.0;
 	private Double yMin = 0.0;
 	private Double yMax = 0.0;
+
+	private Double gridYStart = 0.0;
+	private Double gridYStep = 0.0;
+	private Double gridXStart = 0.0;
+	private Double gridXStep = 0.0;
+
 	private float xTouchOld = 0;
 	private float yTouchOld = 0;
 	private int lastPointerCount = 1;
 	private float lastDtX = 0;
 	private float lastDtY = 0;
 	private boolean drawCustomCanvas = false;
-	private ScaleСoordinates sc = new ScaleСoordinates();
-	
+	private ScaleCoordinates sc = new ScaleCoordinates();
 
 	private void initImageView() {
 
@@ -60,8 +69,91 @@ public class GraphicView extends View {
 		return xMax;
 	}
 
+	/*
+	 * calck optimal Step for scale grid
+	 */
+	private double calcStepGrid(double interval, int kMin, int kMax, int kOpt, boolean isTime) {
+
+		if (interval <= 0)
+			return 0;
+		// array constants for out scale of graphic
+		double stData[] = { 1, 2, 2.5, 5 };
+		double stTime[] = { 1, 2, 3, 5, 10, 15, 30, 45, 60, 120, 150, 180, 240, 720, 1440, 2880, 7200, 14400, 43200,
+				525600 };
+		double st[];
+		if (isTime)
+			st = stTime;
+		else
+			st = stData;
+
+
+		if (!isTime) {
+			int j = 1;
+			while (interval / st[0] < kMin) {
+				for (int i = 0; i < st.length; i++)
+					st[i] = st[i] / 10;
+				j++;
+				if (j > 1000)
+					return interval / kMin;// Bounce protection
+			}
+
+			j = 1;
+			while (interval / st[st.length-1] > kMax) {
+				for (int i = 0; i < st.length; i++)
+					st[i] = st[i] * 10;
+				j++;
+				if (j > 1000)
+					return interval / kMin;// Bounce protection
+			}
+
+		}
+
+
+		int iOpt = -1;
+		double rOpt = 100000;
+
+		for (int i = 0; i < st.length; i++)
+			if (st[i] > 0)
+				if (Math.abs(interval / st[i] - kOpt) < rOpt) {
+					rOpt = Math.abs(interval / st[i] - kOpt);
+					iOpt = i;
+
+				}
+		if (iOpt >= 0)
+			return st[iOpt];
+		else
+			return interval / kOpt;
+
+	}
+
+	/*
+	 * find optimal begin point for scale grid
+	 */
+	double calckGridBeginPoint(double startValue, double step) {
+		if (step <= 0)
+			return 0;
+		double x = 0;
+
+		if ((startValue > 0) && (startValue <= step * 1.5))
+			x = 0;
+		else
+			x = 1.0 * step * ((int) ((startValue - 1.5 * step) / step));
+
+		int j = 0;
+		while (startValue - x > step) {
+
+			x = x + step;
+
+			if (j > 1000)
+				return startValue;
+			j++;
+		}
+
+		return x;
+	}
+
 	/**
-	 * set xMin,xMin and calckulate yMin&yMax
+	 * set xMin,xMin and calculate yMin&yMax
 	 * 
 	 */
 	public void setMinMax(Double xMin, Double xMax) {
@@ -93,10 +185,15 @@ public class GraphicView extends View {
 			yMin = yMin - 10;
 			yMax = yMax + 10;
 		}
-		
-		sc.setScreenArea(1, 1, getWidth()-1, getHeight()-1);
-		sc.setFunctionArea(xMin, yMin, xMax-xMin, yMax-yMin);
-		
+
+		sc.setScreenArea(1, 1, getWidth() - 1, getHeight() - 1);
+		sc.setFunctionArea(xMin, yMin, xMax - xMin, yMax - yMin);
+
+		gridXStep = this.calcStepGrid(xMax - xMin, 2, 4, 3, false);
+		gridXStart = this.calckGridBeginPoint(xMin, gridXStep);
+		gridYStep = this.calcStepGrid(yMax - yMin, 2, 4, 3, false);
+		gridYStart = this.calckGridBeginPoint(yMin, gridYStep);
+
 	}
 
 	public void setDrawCustomCanvas(boolean drawCustomCanvas) {
@@ -112,41 +209,61 @@ public class GraphicView extends View {
 		}
 
 		Paint mPaint = new Paint();
-		/*
-		 * mPaint.setColor(Color.rgb(150, 150, 150));
-		 * canvas.drawRect(1,1,getWidth()-1,getHeight()-1,mPaint);
-		 */
-		mPaint.setColor(Color.rgb(255, 255, 255));
-		canvas.drawRect(new Rect(0, 0,getWidth(),getHeight()),mPaint);
-		
-		mPaint.setColor(Color.rgb(0, 0, 0));
+		// -----Draw background
+		mPaint.setColor(Color.WHITE);
+		canvas.drawRect(new Rect(0, 0, getWidth(), getHeight()), mPaint);
+
+		// -------Draw limit lines
+		mPaint.setColor(Color.BLACK);
 		canvas.drawLine(1, 1, getWidth() - 1, 1, mPaint);
 		canvas.drawLine(getWidth() - 1, getHeight() - 1, getWidth() - 1, 1, mPaint);
 		canvas.drawLine(getWidth() - 1, getHeight() - 1, 1, getHeight() - 1, mPaint);
 		canvas.drawLine(0, 0, 0, getHeight() - 1, mPaint);
 
-    	mPaint.setColor(Color.rgb(100, 100, 100));
+		mPaint.setColor(Color.rgb(100, 100, 100));
 		mPaint.setStrokeWidth(3);
-		
-		canvas.drawLine(0, sc.getDpY(0), getWidth(), sc.getDpY(0), mPaint);
 
+		canvas.drawLine(0, sc.getDpY(0), getWidth(), sc.getDpY(0), mPaint);// Draw
+																			// Y=0
+																			// Line
 
-
-		canvas.drawLine(sc.getDpX(0), 0, sc.getDpX(0), getHeight(), mPaint);
+		canvas.drawLine(sc.getDpX(0), 0, sc.getDpX(0), getHeight(), mPaint);// Draw
+																			// X=0
+																			// Line
+		mPaint.setColor(Color.rgb(180, 180, 180));
+		mPaint.setStrokeWidth(1);
+		mPaint.setTextSize(20);
+		double x=gridXStart;
+		while (x<=xMax){
+			canvas.drawLine(sc.getDpX(x), 0, sc.getDpX(x), getHeight(), mPaint);
+			
+			canvas.drawText(x+"",sc.getDpX(x),getHeight()-10,mPaint);
+			x=x+gridXStep;
+		}
+		double y=gridYStart;
+		while (y<=yMax){
+			canvas.drawLine(0, sc.getDpY(y), getWidth(), sc.getDpY(y), mPaint);
+			if (getHeight()-sc.getDpY(y)>25)
+			canvas.drawText(y+"",0,sc.getDpY(y),mPaint);			
+			y=y+gridYStep;
+		}
+			
 
 		mPaint.setColor(Color.BLUE);
 		mPaint.setStrokeWidth(3);
 
 		for (double fx = 0; fx < this.getWidth(); fx++) {
 
-			double x1 = sc.getFX(fx); //xMin + 1.0 * xi * (xMax - xMin) / this.getWidth();
+			double x1 = sc.getFX(fx); // xMin + 1.0 * xi * (xMax - xMin) /
+										// this.getWidth();
 			double y1 = 0;
 			try {
 				y1 = reversePolishNotation.cackulation(x1);
 			} catch (ArithmeticException e) {
 				continue;
 			}
-			double x2 = sc.getFX(fx+1);//xMin + 1.0 * (xi + 1.0) * (xMax - xMin) / this.getWidth();
+			double x2 = sc.getFX(fx + 1);// xMin + 1.0 * (xi + 1.0) * (xMax -
+											// xMin) / this.getWidth();
 			double y2 = 0;
 			try {
 				y2 = reversePolishNotation.cackulation(x2);
@@ -154,46 +271,45 @@ public class GraphicView extends View {
 				continue;
 			}
 
-			
-			canvas.drawLine((float) fx, sc.getDpY(y1), (float) (fx + 1.0), sc.getDpY(y2), mPaint);
-			
+			canvas.drawLine((float) fx, sc.getDpY(y1), (float) (fx + 1.0), sc.getDpY(y2), mPaint);// draw
+																									// f(x)
+																									// to
+																									// f(x+1)
 
 		}
 
 	}
-/**
+
+	/**
  * 
  */
 	@Override
 	public boolean onTouchEvent(MotionEvent event) {
 		// TODO Auto-generated method stub
 
-		// событие
 		int actionMask = event.getActionMasked();
-		// индекс касания
+
 		int pointerIndex = event.getActionIndex();
-		// число касаний
+
 		int pointerCount = event.getPointerCount();
 
 		switch (actionMask) {
-		case MotionEvent.ACTION_DOWN: // первое касание
+		case MotionEvent.ACTION_DOWN:
 			// inTouch = true;
 			break;
-		case MotionEvent.ACTION_POINTER_DOWN: // последующие касания
+		case MotionEvent.ACTION_POINTER_DOWN:
 			// downPI = pointerIndex;
 			break;
 
-		case MotionEvent.ACTION_UP: // прерывание последнего касания
+		case MotionEvent.ACTION_UP:
 			xTouchOld = 0;
 			yTouchOld = 0;
 
-			// inTouch = false;
-			// sb.setLength(0);
-		case MotionEvent.ACTION_POINTER_UP: // прерывания касаний
-			// upPI = pointerIndex;
+		case MotionEvent.ACTION_POINTER_UP:
+
 			break;
 
-		case MotionEvent.ACTION_MOVE: // движение
+		case MotionEvent.ACTION_MOVE:
 
 			float x = event.getX();
 			float y = event.getY();
@@ -207,9 +323,8 @@ public class GraphicView extends View {
 					double step = 1.0 * (lastDtX - dtX) * (xMax - xMin) / getWidth();
 					xMin = xMin - step / 2;
 					xMax = xMax + step / 2;
-					sc.setFunctionArea(xMin, yMin, xMax-xMin, yMax-yMin);
+					sc.setFunctionArea(xMin, yMin, xMax - xMin, yMax - yMin);
 					invalidate();
-					
 
 				}
 				if (dtY - lastDtY != 0) {
@@ -217,9 +332,8 @@ public class GraphicView extends View {
 					double step = 1.0 * (lastDtY - dtY) * (yMax - yMin) / getHeight();
 					yMin = yMin - step / 2;
 					yMax = yMax + step / 2;
-					sc.setFunctionArea(xMin, yMin, xMax-xMin, yMax-yMin);
+					sc.setFunctionArea(xMin, yMin, xMax - xMin, yMax - yMin);
 					invalidate();
-
 
 				}
 
@@ -245,7 +359,7 @@ public class GraphicView extends View {
 
 				// xMin=xMin+xTouchOld-x;
 				// xMax=xMax+xTouchOld-x;
-				sc.setFunctionArea(xMin, yMin, xMax-xMin, yMax-yMin);
+				sc.setFunctionArea(xMin, yMin, xMax - xMin, yMax - yMin);
 				invalidate();
 
 			}
@@ -253,7 +367,7 @@ public class GraphicView extends View {
 				step = 1.0 * (yTouchOld - y) * (yMax - yMin) / getHeight();
 				yMin = yMin - step;
 				yMax = yMax - step;
-				sc.setFunctionArea(xMin, yMin, xMax-xMin, yMax-yMin);
+				sc.setFunctionArea(xMin, yMin, xMax - xMin, yMax - yMin);
 				invalidate();
 
 			}
