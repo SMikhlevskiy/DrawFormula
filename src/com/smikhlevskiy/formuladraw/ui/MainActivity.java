@@ -1,13 +1,10 @@
 package com.smikhlevskiy.formuladraw.ui;
 
-import java.util.List;
+
 
 import com.smikhlevskiy.formuladraw.ui.UserRegActivity;
 import com.smikhlevskiy.formuladraw.util.FDConstants;
-import com.parse.FindCallback;
-import com.parse.ParseException;
 import com.parse.ParseObject;
-import com.parse.ParseQuery;
 import com.parse.ParseUser;
 import com.smikhlevskiy.formuladraw.entity.FormulaDrawController;
 import com.smikhlevskiy.formuladraw.model.FindRoot;
@@ -21,8 +18,6 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
-import android.view.ContextMenu;
-import android.view.ContextMenu.ContextMenuInfo;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -225,9 +220,8 @@ public class MainActivity extends ActionBarActivity {
 	public boolean onOptionsItemSelected(MenuItem item) {
 
 		switch (item.getItemId()) {
-		case R.id.libraryFunctions: {
-			break;
-		}
+		
+		
 		case R.id.loadFormula: {
 			startSelectFormulaActivity(FDConstants.LOAD_FORMULA);
 

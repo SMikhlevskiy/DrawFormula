@@ -1,14 +1,17 @@
 package com.smikhlevskiy.formuladraw.ui;
 
 import com.smikhlevskiy.formuladraw.model.ReversePolishNotation;
+import com.smikhlevskiy.formuladraw.util.ScaleСoordinates;
 
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.graphics.Rect;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
+import android.widget.Toast;
 
 public class GraphicView extends View {
 
@@ -23,6 +26,8 @@ public class GraphicView extends View {
 	private float lastDtX = 0;
 	private float lastDtY = 0;
 	private boolean drawCustomCanvas = false;
+	private ScaleСoordinates sc = new ScaleСoordinates();
+	
 
 	private void initImageView() {
 
@@ -88,7 +93,10 @@ public class GraphicView extends View {
 			yMin = yMin - 10;
 			yMax = yMax + 10;
 		}
-
+		
+		sc.setScreenArea(1, 1, getWidth()-1, getHeight()-1);
+		sc.setFunctionArea(xMin, yMin, xMax-xMin, yMax-yMin);
+		
 	}
 
 	public void setDrawCustomCanvas(boolean drawCustomCanvas) {
@@ -108,34 +116,37 @@ public class GraphicView extends View {
 		 * mPaint.setColor(Color.rgb(150, 150, 150));
 		 * canvas.drawRect(1,1,getWidth()-1,getHeight()-1,mPaint);
 		 */
+		mPaint.setColor(Color.rgb(255, 255, 255));
+		canvas.drawRect(new Rect(0, 0,getWidth(),getHeight()),mPaint);
+		
 		mPaint.setColor(Color.rgb(0, 0, 0));
 		canvas.drawLine(1, 1, getWidth() - 1, 1, mPaint);
 		canvas.drawLine(getWidth() - 1, getHeight() - 1, getWidth() - 1, 1, mPaint);
 		canvas.drawLine(getWidth() - 1, getHeight() - 1, 1, getHeight() - 1, mPaint);
 		canvas.drawLine(0, 0, 0, getHeight() - 1, mPaint);
 
-		mPaint.setColor(Color.rgb(100, 100, 100));
+    	mPaint.setColor(Color.rgb(100, 100, 100));
 		mPaint.setStrokeWidth(3);
+		
+		canvas.drawLine(0, sc.getDpY(0), getWidth(), sc.getDpY(0), mPaint);
 
-		double yi0 = 1.0 * this.getHeight() - 1.0 * (0 - yMin) * this.getHeight() / (yMax - yMin);
-		canvas.drawLine(0, (float) yi0, getWidth(), (float) yi0, mPaint);
 
-		double xi0 = (0 - xMin) * this.getWidth() / (xMax - xMin);
-		canvas.drawLine((float) xi0, 0, (float) xi0, getHeight(), mPaint);
+
+		canvas.drawLine(sc.getDpX(0), 0, sc.getDpX(0), getHeight(), mPaint);
 
 		mPaint.setColor(Color.BLUE);
 		mPaint.setStrokeWidth(3);
 
-		for (double xi = 0; xi < this.getWidth(); xi++) {
+		for (double fx = 0; fx < this.getWidth(); fx++) {
 
-			double x1 = xMin + 1.0 * xi * (xMax - xMin) / this.getWidth();
+			double x1 = sc.getFX(fx); //xMin + 1.0 * xi * (xMax - xMin) / this.getWidth();
 			double y1 = 0;
 			try {
 				y1 = reversePolishNotation.cackulation(x1);
 			} catch (ArithmeticException e) {
 				continue;
 			}
-			double x2 = xMin + 1.0 * (xi + 1.0) * (xMax - xMin) / this.getWidth();
+			double x2 = sc.getFX(fx+1);//xMin + 1.0 * (xi + 1.0) * (xMax - xMin) / this.getWidth();
 			double y2 = 0;
 			try {
 				y2 = reversePolishNotation.cackulation(x2);
@@ -143,15 +154,16 @@ public class GraphicView extends View {
 				continue;
 			}
 
-			double yi1 = 1.0 * this.getHeight() - 1.0 * (y1 - yMin) * this.getHeight() / (yMax - yMin);
-			double yi2 = 1.0 * this.getHeight() - 1.0 * (y2 - yMin) * this.getHeight() / (yMax - yMin);
-
-			canvas.drawLine((float) xi, (float) yi1, (float) (xi + 1.0), (float) yi2, mPaint);
+			
+			canvas.drawLine((float) fx, sc.getDpY(y1), (float) (fx + 1.0), sc.getDpY(y2), mPaint);
+			
 
 		}
 
 	}
-
+/**
+ * 
+ */
 	@Override
 	public boolean onTouchEvent(MotionEvent event) {
 		// TODO Auto-generated method stub
@@ -182,10 +194,6 @@ public class GraphicView extends View {
 			break;
 
 		case MotionEvent.ACTION_MOVE: // движение
-			/*
-			 * Toast toast = Toast.makeText(this.getContext(),
-			 * "Пора покормить кота!", Toast.LENGTH_SHORT); toast.show();
-			 */
 
 			float x = event.getX();
 			float y = event.getY();
@@ -199,7 +207,9 @@ public class GraphicView extends View {
 					double step = 1.0 * (lastDtX - dtX) * (xMax - xMin) / getWidth();
 					xMin = xMin - step / 2;
 					xMax = xMax + step / 2;
+					sc.setFunctionArea(xMin, yMin, xMax-xMin, yMax-yMin);
 					invalidate();
+					
 
 				}
 				if (dtY - lastDtY != 0) {
@@ -207,7 +217,9 @@ public class GraphicView extends View {
 					double step = 1.0 * (lastDtY - dtY) * (yMax - yMin) / getHeight();
 					yMin = yMin - step / 2;
 					yMax = yMax + step / 2;
+					sc.setFunctionArea(xMin, yMin, xMax-xMin, yMax-yMin);
 					invalidate();
+
 
 				}
 
@@ -233,6 +245,7 @@ public class GraphicView extends View {
 
 				// xMin=xMin+xTouchOld-x;
 				// xMax=xMax+xTouchOld-x;
+				sc.setFunctionArea(xMin, yMin, xMax-xMin, yMax-yMin);
 				invalidate();
 
 			}
@@ -240,7 +253,7 @@ public class GraphicView extends View {
 				step = 1.0 * (yTouchOld - y) * (yMax - yMin) / getHeight();
 				yMin = yMin - step;
 				yMax = yMax - step;
-
+				sc.setFunctionArea(xMin, yMin, xMax-xMin, yMax-yMin);
 				invalidate();
 
 			}
