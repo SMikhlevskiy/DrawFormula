@@ -1,5 +1,7 @@
 package com.smikhlevskiy.formuladraw.util;
 
+import android.graphics.Color;
+
 
 public abstract  class FDConstants {
 
@@ -57,5 +59,5 @@ public abstract  class FDConstants {
 		XVALUE, ERROR
 	};
 
-
+	public static int[] colorSpinnerLines = { Color.BLUE, Color.RED, Color.GREEN, Color.MAGENTA, Color.YELLOW, Color.BLACK };
 }

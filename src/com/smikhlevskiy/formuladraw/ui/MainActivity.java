@@ -1,20 +1,25 @@
 package com.smikhlevskiy.formuladraw.ui;
 
-
+import java.util.ArrayList;
 
 import com.smikhlevskiy.formuladraw.ui.UserRegActivity;
 import com.smikhlevskiy.formuladraw.util.FDConstants;
 import com.parse.ParseObject;
 import com.parse.ParseUser;
+import com.smikhlevskiy.formuladraw.adapters.SelectFormulaAdapter;
+import com.smikhlevskiy.formuladraw.adapters.SpinnerLinesAdapter;
 import com.smikhlevskiy.formuladraw.entity.FormulaDrawController;
 import com.smikhlevskiy.formuladraw.model.FindRoot;
 import com.smikhlevskiy.formuladraw.model.ReversePolishNotation;
+import com.smikhlevskiy.formuladraw.model.SelectFormulaItem;
+import com.smikhlevskiy.formuladraw.model.SpinnerItemLines;
 import com.smikhlevskiy.formuladraw.R;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
@@ -22,13 +27,16 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
 public class MainActivity extends ActionBarActivity {
 
+	private Spinner spinnerLine;
 	private Button buttonCalck;
 	private Button buttonDraw;
 	private Button buttonRoot;
@@ -114,12 +122,21 @@ public class MainActivity extends ActionBarActivity {
 		editTextXEnd = (EditText) findViewById(R.id.editTextXend);
 		graphicView = (GraphicView) findViewById(R.id.graphicView);
 
+		// ---------------Spinner Lines---
+		
+		ArrayList<SpinnerItemLines> aList = new ArrayList<SpinnerItemLines>();
+		for (int i = 0; i < FDConstants.colorSpinnerLines.length; i++)
+			aList.add(new SpinnerItemLines(getString(R.string.line)+" " + (i + 1), FDConstants.colorSpinnerLines[i]));
+		SpinnerLinesAdapter adapter = new SpinnerLinesAdapter(this, R.layout.item_spinner_lines, aList);
+		spinnerLine = (Spinner) findViewById(R.id.spinnerLine);
+		spinnerLine.setAdapter(adapter);
+		spinnerLine.setSelection(0);
+		//--------------ActionBar-----
 		ActionBar bar = getSupportActionBar();
 		bar.setDisplayShowHomeEnabled(true);
 		bar.setIcon(R.drawable.ic_launcher);
-
+		//------------Prefernces--------
 		formulaDrawPreferences = getSharedPreferences(FDConstants.APP_PREFERENCES, getApplicationContext().MODE_PRIVATE);
-
 		editTextFunction.setText(formulaDrawPreferences.getString(FDConstants.APP_PREFERENCES_TEXTFormula, "x*x+x"));
 
 		buttonRoot.setOnClickListener(new OnClickListener() {
@@ -220,8 +237,7 @@ public class MainActivity extends ActionBarActivity {
 	public boolean onOptionsItemSelected(MenuItem item) {
 
 		switch (item.getItemId()) {
-		
-		
+
 		case R.id.loadFormula: {
 			startSelectFormulaActivity(FDConstants.LOAD_FORMULA);
 

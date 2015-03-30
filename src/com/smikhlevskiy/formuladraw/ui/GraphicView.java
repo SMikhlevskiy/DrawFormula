@@ -230,7 +230,7 @@ public class GraphicView extends View {
 		canvas.drawLine(sc.getDpX(0), 0, sc.getDpX(0), getHeight(), mPaint);// Draw
 																			// X=0
 																			// Line
-		mPaint.setColor(Color.rgb(180, 180, 180));
+		mPaint.setColor(Color.rgb(120, 120, 120));
 		mPaint.setStrokeWidth(1);
 		mPaint.setTextSize(20);
 		double x=gridXStart;

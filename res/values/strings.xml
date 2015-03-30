@@ -41,5 +41,6 @@
     
     <string name="inputNameFormula">Введите имя формулы</string>
     <string name="pleaseReg">Зарегистрируйтись пожайлуста</string>
+    <string name="line">Линия</string>
 
 </resources>
