@@ -5,6 +5,7 @@ package com.smikhlevskiy.formuladraw.ui;
  * 
  */
 import com.smikhlevskiy.formuladraw.model.ReversePolishNotation;
+import com.smikhlevskiy.formuladraw.util.FDConstants;
 import com.smikhlevskiy.formuladraw.util.ScaleCoordinates;
 
 import android.content.Context;
@@ -19,7 +20,7 @@ import android.widget.Toast;
 
 public class GraphicView extends View {
 
-	private ReversePolishNotation reversePolishNotation = null;
+	private ReversePolishNotation reversePolishNotation[]=null;
 	private Double xMin = 0.0;
 	private Double xMax = 0.0;
 	private Double yMin = 0.0;
@@ -57,7 +58,7 @@ public class GraphicView extends View {
 
 	}
 
-	public void setReversePolishNotation(ReversePolishNotation reversePolishNotation) {
+	public void setReversePolishNotation(ReversePolishNotation[] reversePolishNotation) {
 		this.reversePolishNotation = reversePolishNotation;
 	}
 
@@ -162,11 +163,12 @@ public class GraphicView extends View {
 		this.xMax = xMax;
 		yMin = Double.MAX_VALUE;
 		yMax = Double.MIN_VALUE;
+		for (int i = 0; i < FDConstants.colorSpinnerLines.length; i++) 
 		for (int xi = 0; xi <= this.getWidth(); xi++) {
 			double x = xMin + 1.0 * xi * (xMax - xMin) / this.getWidth();
 			double y = 0;
 			try {
-				y = reversePolishNotation.cackulation(x);
+				y = reversePolishNotation[i].cackulation(x);
 
 			} catch (ArithmeticException e) {
 
@@ -249,16 +251,16 @@ public class GraphicView extends View {
 		}
 			
 
-		mPaint.setColor(Color.BLUE);
+		
 		mPaint.setStrokeWidth(3);
-
+		for (int i = 0; i < FDConstants.colorSpinnerLines.length; i++) 
 		for (double fx = 0; fx < this.getWidth(); fx++) {
-
+			mPaint.setColor(FDConstants.colorSpinnerLines[i]);
 			double x1 = sc.getFX(fx); // xMin + 1.0 * xi * (xMax - xMin) /
 										// this.getWidth();
 			double y1 = 0;
 			try {
-				y1 = reversePolishNotation.cackulation(x1);
+				y1 = reversePolishNotation[i].cackulation(x1);
 			} catch (ArithmeticException e) {
 				continue;
 			}
@@ -266,7 +268,7 @@ public class GraphicView extends View {
 											// xMin) / this.getWidth();
 			double y2 = 0;
 			try {
-				y2 = reversePolishNotation.cackulation(x2);
+				y2 = reversePolishNotation[i].cackulation(x2);
 			} catch (ArithmeticException e) {
 				continue;
 			}

@@ -23,10 +23,14 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
@@ -58,7 +62,8 @@ public class MainActivity extends ActionBarActivity {
 	 */
 	private void saveWorkspace() {
 		SharedPreferences.Editor editor = formulaDrawPreferences.edit();
-		editor.putString(FDConstants.APP_PREFERENCES_TEXTFormula, editTextFunction.getText().toString());
+		for (int i = 0; i < FDConstants.colorSpinnerLines.length; i++)		
+		editor.putString(FDConstants.APP_PREFERENCES_TEXTFormula+i,formulaDrawController.getFormulas(i));
 		editor.commit();
 	}
 
@@ -123,22 +128,65 @@ public class MainActivity extends ActionBarActivity {
 		graphicView = (GraphicView) findViewById(R.id.graphicView);
 
 		// ---------------Spinner Lines---
-		
+
 		ArrayList<SpinnerItemLines> aList = new ArrayList<SpinnerItemLines>();
 		for (int i = 0; i < FDConstants.colorSpinnerLines.length; i++)
-			aList.add(new SpinnerItemLines(getString(R.string.line)+" " + (i + 1), FDConstants.colorSpinnerLines[i]));
+			aList.add(new SpinnerItemLines(getString(R.string.line) + " " + (i + 1), FDConstants.colorSpinnerLines[i]));
 		SpinnerLinesAdapter adapter = new SpinnerLinesAdapter(this, R.layout.item_spinner_lines, aList);
 		spinnerLine = (Spinner) findViewById(R.id.spinnerLine);
 		spinnerLine.setAdapter(adapter);
 		spinnerLine.setSelection(0);
-		//--------------ActionBar-----
+		
+		spinnerLine.setOnItemSelectedListener(new OnItemSelectedListener() {
+
+			@Override
+			public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+				// TODO Auto-generated method stub
+				editTextFunction.setText(formulaDrawController.getFormulas(position));
+				formulaDrawController.setCurrentLine(position);
+			}
+
+			@Override
+			public void onNothingSelected(AdapterView<?> parent) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+		});
+		// --------------ActionBar-----
 		ActionBar bar = getSupportActionBar();
 		bar.setDisplayShowHomeEnabled(true);
 		bar.setIcon(R.drawable.ic_launcher);
-		//------------Prefernces--------
-		formulaDrawPreferences = getSharedPreferences(FDConstants.APP_PREFERENCES, getApplicationContext().MODE_PRIVATE);
-		editTextFunction.setText(formulaDrawPreferences.getString(FDConstants.APP_PREFERENCES_TEXTFormula, "x*x+x"));
+		
+		
 
+		
+		// --------------On chanage formula's text
+		editTextFunction.addTextChangedListener(new TextWatcher() {
+			public void afterTextChanged(Editable s) {
+				formulaDrawController.setFormulas(s.toString(),spinnerLine.getSelectedItemPosition());
+				/*
+				 * i++; tv.setText(String.valueOf(i) + " / " +
+				 * String.valueOf(charCounts));
+				 */
+			}
+
+			public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+			}
+
+			public void onTextChanged(CharSequence s, int start, int before, int count) {
+			}
+		});
+		
+			
+		 formulaDrawPreferences = getSharedPreferences(FDConstants.APP_PREFERENCES, getApplicationContext().MODE_PRIVATE);
+		for (int i = 0; i < FDConstants.colorSpinnerLines.length; i++){
+			String s="";
+		if (i==0) s="x*x+x";	
+		formulaDrawController.setFormulas(formulaDrawPreferences.getString(FDConstants.APP_PREFERENCES_TEXTFormula+i, s), i);
+		}
+		editTextFunction.setText(formulaDrawController.getFormulas(spinnerLine.getSelectedItemPosition()));
+		// -----------------------
 		buttonRoot.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
