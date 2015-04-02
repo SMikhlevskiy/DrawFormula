@@ -222,7 +222,7 @@ public class GraphicView extends View {
 		canvas.drawLine(getWidth() - 1, getHeight() - 1, 1, getHeight() - 1, mPaint);
 		canvas.drawLine(0, 0, 0, getHeight() - 1, mPaint);
 
-		mPaint.setColor(Color.rgb(100, 100, 100));
+		mPaint.setColor(Color.rgb(150, 100, 100));
 		mPaint.setStrokeWidth(3);
 
 		canvas.drawLine(0, sc.getDpY(0), getWidth(), sc.getDpY(0), mPaint);// Draw
@@ -232,7 +232,7 @@ public class GraphicView extends View {
 		canvas.drawLine(sc.getDpX(0), 0, sc.getDpX(0), getHeight(), mPaint);// Draw
 																			// X=0
 																			// Line
-		mPaint.setColor(Color.rgb(120, 120, 120));
+		mPaint.setColor(Color.rgb(100, 100, 100));
 		mPaint.setStrokeWidth(1);
 		mPaint.setTextSize(20);
 		double x=gridXStart;
@@ -315,6 +315,10 @@ public class GraphicView extends View {
 
 			float x = event.getX();
 			float y = event.getY();
+			
+			//Toast.makeText(getContext(), "x="+x+", y="+y,0).show();
+			
+			
 			// -----------scale ----------------
 			if ((pointerCount >= 2) && (lastPointerCount > 1)) {
 				float dtY = Math.abs(event.getY(0) - event.getY(1));
@@ -380,5 +384,15 @@ public class GraphicView extends View {
 
 		return true;
 	}
+	
+private void GraphicOutString(Canvas canvas, String s){
+	Paint mPaint = new Paint();
+	mPaint.setColor(Color.rgb(100, 100, 100));
+	mPaint.setTextSize(20);
+	Rect    bounds = new Rect();
+	mPaint.getTextBounds(s, 0, s.length(), bounds);
+	
+	canvas.drawText(s,getWidth()-bounds.width(),getHeight()-bounds.height(),mPaint);	
+}
 
 }

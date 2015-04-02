@@ -9,7 +9,7 @@ import com.parse.ParseUser;
 import com.smikhlevskiy.formuladraw.adapters.SelectFormulaAdapter;
 import com.smikhlevskiy.formuladraw.adapters.SpinnerLinesAdapter;
 import com.smikhlevskiy.formuladraw.entity.FormulaDrawController;
-import com.smikhlevskiy.formuladraw.model.FindRoot;
+import com.smikhlevskiy.formuladraw.model.MathUtility;
 import com.smikhlevskiy.formuladraw.model.ReversePolishNotation;
 import com.smikhlevskiy.formuladraw.model.SelectFormulaItem;
 import com.smikhlevskiy.formuladraw.model.SpinnerItemLines;
@@ -44,6 +44,7 @@ public class MainActivity extends ActionBarActivity {
 	private Button buttonCalck;
 	private Button buttonDraw;
 	private Button buttonRoot;
+	private Button buttonCalcIntegral;
 	private Button buttonUserReg;
 	private EditText editTextFunction;
 	private EditText editTextXStart;
@@ -118,6 +119,7 @@ public class MainActivity extends ActionBarActivity {
 		buttonCalck = (Button) findViewById(R.id.buttonCalck);
 		buttonDraw = (Button) findViewById(R.id.buttonDraw);
 		buttonRoot = (Button) findViewById(R.id.buttonRoot);
+		buttonCalcIntegral = (Button) findViewById(R.id.buttonCalcIntegral);
 		buttonUserReg = (Button) findViewById(R.id.buttonRegistration);
 
 		editTextFunction = (EditText) findViewById(R.id.editTextFormula);
@@ -165,10 +167,6 @@ public class MainActivity extends ActionBarActivity {
 		editTextFunction.addTextChangedListener(new TextWatcher() {
 			public void afterTextChanged(Editable s) {
 				formulaDrawController.setFormulas(s.toString(),spinnerLine.getSelectedItemPosition());
-				/*
-				 * i++; tv.setText(String.valueOf(i) + " / " +
-				 * String.valueOf(charCounts));
-				 */
 			}
 
 			public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -184,18 +182,34 @@ public class MainActivity extends ActionBarActivity {
 			String s="";
 		if (i==0) s="x*x+x";	
 		formulaDrawController.setFormulas(formulaDrawPreferences.getString(FDConstants.APP_PREFERENCES_TEXTFormula+i, s), i);
+		//formulaDrawController.setFormulas("",i);
 		}
-		editTextFunction.setText(formulaDrawController.getFormulas(spinnerLine.getSelectedItemPosition()));
-		// -----------------------
+		//editTextFunction.setText(formulaDrawController.getFormulas(spinnerLine.getSelectedItemPosition()));
+		// --------------- Find Root-------------
 		buttonRoot.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				FindRoot findRoot = new FindRoot(getApplicationContext(), editTextFunction.getText().toString(),
+				MathUtility mathUtility=new MathUtility();
+				
+				mathUtility.findRoot(getApplicationContext(), editTextFunction.getText().toString(),
 						new Double(editTextXStart.getText().toString()), new Double(editTextXEnd.getText().toString()),
-						(double) 0.01);
+						(double) 0.000001);
 
 			}
 		});
+		// --------------- calckIntegral-------------
+		buttonCalcIntegral.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				MathUtility mathUtility=new MathUtility();
+				
+				mathUtility.calckIntegral(getApplicationContext(), editTextFunction.getText().toString(),
+						new Double(editTextXStart.getText().toString()), new Double(editTextXEnd.getText().toString()),
+						10000);
+				
+			}
+		});
+
 
 		/* -----Button User Registration form Set On ClickListener---------- */
 		buttonUserReg.setOnClickListener(new OnClickListener() {

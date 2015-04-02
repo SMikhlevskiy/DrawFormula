@@ -10,6 +10,7 @@
     <string name="beginGraph">Начало</string>
     <string name="endGraph">Конец</string>
     <string name="findRoot">Корень</string>
+    <string name="calcIntegral">Интеграл</string>
     <string name="registration">Регистрация</string>
     <string name="logOut">Выход</string>
     <string name="login">"Логин"</string>

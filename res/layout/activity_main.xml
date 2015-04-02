@@ -40,8 +40,9 @@
 
         <Button
             android:id="@+id/buttonCalck"
-            android:layout_width="50dp"
-            android:layout_height="wrap_content"
+            android:layout_width="35dp"
+            android:layout_height="40dp"
+            android:background="@drawable/roundedbutton"
             android:drawableLeft="@drawable/calck"
             android:text="" />
 
@@ -62,9 +63,12 @@
         <Button
             android:id="@+id/buttonDraw"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="35dp"
             android:layout_marginLeft="10dp"
-            android:text="@string/drawGraph" />
+            android:background="@drawable/roundedbutton"
+            android:gravity="left|center_vertical"
+            android:text="@string/drawGraph"
+            android:textStyle="bold|italic" />
 
         <TextView
             android:layout_width="wrap_content"
@@ -113,9 +117,22 @@
         <Button
             android:id="@+id/buttonRoot"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="35dp"
             android:layout_marginLeft="10dp"
-            android:text="@string/findRoot" />
+            android:background="@drawable/roundedbutton"
+            android:gravity="left|center_vertical"
+            android:text="@string/findRoot"
+            android:textStyle="bold|italic" />
+
+        <Button
+            android:id="@+id/buttonCalcIntegral"
+            android:layout_width="wrap_content"
+            android:layout_height="35dp"
+            android:layout_marginLeft="2dp"
+            android:background="@drawable/roundedbutton"
+            android:gravity="left|center_vertical"
+            android:text="@string/calcIntegral"
+            android:textStyle="bold|italic" />
     </LinearLayout>
 
     <LinearLayout
@@ -126,9 +143,12 @@
         <Button
             android:id="@+id/buttonRegistration"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="35dp"
             android:layout_marginLeft="10dp"
-            android:text="@string/registration" />
+            android:background="@drawable/roundedbutton"
+            android:gravity="left|center_vertical"
+            android:text="@string/registration"
+            android:textStyle="bold|italic" />
 
         <TextView
             android:id="@+id/textViewRegUser"
