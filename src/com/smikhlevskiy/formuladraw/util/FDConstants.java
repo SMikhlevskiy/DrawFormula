@@ -5,7 +5,8 @@ import android.graphics.Color;
 
 public abstract  class FDConstants {
 
-
+	//------------Main Handler messages-----
+	public static final int OUT_TEXT_MESSAGE=1;
 	//------------type SelectFormula--------
 	
 	public static final int LOAD_FORMULA = 1;

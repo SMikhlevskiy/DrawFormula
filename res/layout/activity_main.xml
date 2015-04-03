@@ -158,4 +158,11 @@
             android:text="@string/notRegistredUser" />
     </LinearLayout>
 
+    <TextView
+        android:id="@+id/textViewInfoBox"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="10dp"
+        android:text="" />
+
 </LinearLayout>

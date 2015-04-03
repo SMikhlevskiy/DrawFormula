@@ -13,6 +13,8 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Rect;
+import android.os.Handler;
+import android.os.Message;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
@@ -38,6 +40,12 @@ public class GraphicView extends View {
 	private float lastDtY = 0;
 	private boolean drawCustomCanvas = false;
 	private ScaleCoordinates sc = new ScaleCoordinates();
+	
+	private Handler outHandler;
+
+	public void setOutHandler(Handler outHandler) {
+		this.outHandler = outHandler;
+	}
 
 	private void initImageView() {
 
@@ -281,6 +289,17 @@ public class GraphicView extends View {
 		}
 
 	}
+/**
+ * Out XY in main Activity
+ * @param xDown
+ * @param yDown
+ */
+	private void outXY(float xDown, float yDown) {
+		Message message=outHandler.obtainMessage();
+		message.what=FDConstants.OUT_TEXT_MESSAGE;
+		message.obj=new String( "x="+xDown+", y="+yDown);
+		outHandler.sendMessage(message);
+	}
 
 	/**
  * 
@@ -297,6 +316,14 @@ public class GraphicView extends View {
 
 		switch (actionMask) {
 		case MotionEvent.ACTION_DOWN:
+			
+			float xDown = event.getX();
+			float yDown = event.getY();
+			
+			//Toast.makeText(getContext(), "x="+x+", y="+y,0).show();
+			outXY(xDown, yDown);
+			
+
 			// inTouch = true;
 			break;
 		case MotionEvent.ACTION_POINTER_DOWN:
@@ -315,6 +342,7 @@ public class GraphicView extends View {
 
 			float x = event.getX();
 			float y = event.getY();
+			outXY(x, y);
 			
 			//Toast.makeText(getContext(), "x="+x+", y="+y,0).show();
 			
@@ -384,6 +412,7 @@ public class GraphicView extends View {
 
 		return true;
 	}
+
 	
 private void GraphicOutString(Canvas canvas, String s){
 	Paint mPaint = new Paint();

@@ -43,5 +43,9 @@
     <string name="inputNameFormula">Введите имя формулы</string>
     <string name="pleaseReg">Зарегистрируйтись пожайлуста</string>
     <string name="line">Линия</string>
+    
+    <string name="rootOk">Корень найден, x=</string>
+    <string name="rootBad">Корень не найден</string>
+    <string name="integral">Интеграл=</string>
 
 </resources>

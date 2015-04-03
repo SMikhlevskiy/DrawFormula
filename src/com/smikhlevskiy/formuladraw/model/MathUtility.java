@@ -2,8 +2,13 @@ package com.smikhlevskiy.formuladraw.model;
 
 import java.util.concurrent.TimeUnit;
 
+import com.smikhlevskiy.formuladraw.R;
+import com.smikhlevskiy.formuladraw.util.FDConstants;
+
 import android.content.Context;
 import android.os.AsyncTask;
+import android.os.Handler;
+import android.os.Message;
 import android.widget.Toast;
 
 public class MathUtility {
@@ -13,6 +18,9 @@ public class MathUtility {
 	private double xEnd;
 	private double eps;
 	private int numParse;
+	private Handler outHandler;
+
+	
 
 	private MyAsynkTask mt;
 
@@ -34,7 +42,13 @@ public class MathUtility {
 			double x=xStart+i*step;
 			sum = sum + step * (rpn.cackulation(x) + rpn.cackulation(x + step)) / 2;
 		}
-		Toast.makeText(context, "Интеграл=" + sum, Toast.LENGTH_LONG).show();
+		
+		Message message=outHandler.obtainMessage();
+		message.what=FDConstants.OUT_TEXT_MESSAGE;
+		message.obj=new String(context.getString(R.string.integral) + sum);
+		outHandler.sendMessage(message);
+		
+		
 
 	}
 
@@ -102,11 +116,18 @@ public class MathUtility {
 		@Override
 		protected void onPostExecute(Double result) {
 			super.onPostExecute(result);
+			String outStringMessage;
 			if (result == null)
-				Toast.makeText(context, "Корень не найден", Toast.LENGTH_LONG).show();
+				outStringMessage=context.getString(R.string.rootBad);
 			else
-				Toast.makeText(context, "Корень найден. X=" + result, Toast.LENGTH_LONG).show();
+				outStringMessage=context.getString(R.string.rootOk) + result;
+			Message message=outHandler.obtainMessage();
+			message.what=FDConstants.OUT_TEXT_MESSAGE;
+			message.obj=outStringMessage;
+			outHandler.sendMessage(message);				
 		}
 	}
-
+	public void setOutHandler(Handler outHandler) {
+		this.outHandler = outHandler;
+	}
 }
