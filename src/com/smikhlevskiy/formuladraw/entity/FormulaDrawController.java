@@ -1,8 +1,11 @@
 package com.smikhlevskiy.formuladraw.entity;
 
 import android.content.Context;
+import android.os.Handler;
+import android.os.Message;
 import android.widget.Toast;
 
+import com.smikhlevskiy.formuladraw.R;
 import com.smikhlevskiy.formuladraw.model.FormulaDrawBaseData;
 import com.smikhlevskiy.formuladraw.model.ReversePolishNotation;
 import com.smikhlevskiy.formuladraw.ui.GraphicView;
@@ -11,6 +14,9 @@ import com.smikhlevskiy.formuladraw.util.FDConstants;
 public class FormulaDrawController {
 
 	private String[] formulas = new String[FDConstants.colorSpinnerLines.length];
+	private Context context;
+	private Handler outHandler;
+	
 	private int currentLine = 0;
 
 	public int getCurrentLine() {
@@ -31,9 +37,12 @@ public class FormulaDrawController {
 
 	private FormulaDrawBaseData formulaDrawBaseData;
 
-	public FormulaDrawController(Context context) {
+	public FormulaDrawController(Context context,Handler outHandler) {
 		super();
+		this.context=context;
+		this.outHandler=outHandler;
 		FormulaDrawBaseData formulaDrawBaseData = new FormulaDrawBaseData(context);
+		
 
 		// TODO Auto-generated constructor stub
 	}
@@ -52,14 +61,25 @@ public class FormulaDrawController {
 		graphicView.invalidate();
 	}
 
-	public double cakulator(String textFormula, double x) {
+	public void cakulator(String textFormula, double x) {
 		ReversePolishNotation reversePolishNotation = new ReversePolishNotation();
 		reversePolishNotation.setFormula(textFormula);
 		reversePolishNotation.compile();
+		
+		Message message=outHandler.obtainMessage();
+		message.what=FDConstants.OUT_TEXT_MESSAGE;
+		
 		try {
-			return reversePolishNotation.cackulation(x);
+			double val=reversePolishNotation.cackulation(x);
+			
+			message.obj=new String("f("+x+")=" + val);
+			outHandler.sendMessage(message);
+			
+			
 		} catch (ArithmeticException e) {
-			throw e;
+			message.obj=new String(context.getString(R.string.mathError));
+			outHandler.sendMessage(message);		
+			
 
 		}
 

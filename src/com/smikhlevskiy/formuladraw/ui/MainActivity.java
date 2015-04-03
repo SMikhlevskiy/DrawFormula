@@ -26,6 +26,7 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -50,7 +51,7 @@ public class MainActivity extends ActionBarActivity {
 	private EditText editTextFunction;
 	private EditText editTextXStart;
 	private EditText editTextXEnd;
-	private TextView textViewResult;
+
 	private TextView textViewRegUser;
 	private TextView textViewInfoBox;
 	private GraphicView graphicView;
@@ -112,26 +113,12 @@ public class MainActivity extends ActionBarActivity {
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
-
+		Log.i("Main activity", "Start FindViews");
+		
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
-
-		formulaDrawController = new FormulaDrawController(this);
-
-		buttonCalck = (Button) findViewById(R.id.buttonCalck);
-		buttonDraw = (Button) findViewById(R.id.buttonDraw);
-		buttonRoot = (Button) findViewById(R.id.buttonRoot);
-		buttonCalcIntegral = (Button) findViewById(R.id.buttonCalcIntegral);
-		buttonUserReg = (Button) findViewById(R.id.buttonRegistration);
-
-		editTextFunction = (EditText) findViewById(R.id.editTextFormula);
-		textViewResult = (TextView) findViewById(R.id.textViewResult);
-		textViewRegUser = (TextView) findViewById(R.id.textViewRegUser);
-		editTextXStart = (EditText) findViewById(R.id.editTextXstart);
-		editTextXEnd = (EditText) findViewById(R.id.editTextXend);
-		graphicView = (GraphicView) findViewById(R.id.graphicView);
-
-		textViewInfoBox = (TextView) findViewById(R.id.textViewInfoBox);
+		
+		Log.i("Main activity", "Start FindViews");
 		//-------------Activity main Handler
 		mainActivityHandler = new Handler() {
 			public void handleMessage(android.os.Message msg) {
@@ -145,8 +132,27 @@ public class MainActivity extends ActionBarActivity {
 				}
 			}
 		};
+
+		formulaDrawController = new FormulaDrawController(this,mainActivityHandler);
+
+		buttonCalck = (Button) findViewById(R.id.buttonCalck);
+		buttonDraw = (Button) findViewById(R.id.buttonDraw);
+		buttonRoot = (Button) findViewById(R.id.buttonRoot);
+		buttonCalcIntegral = (Button) findViewById(R.id.buttonCalcIntegral);
+		buttonUserReg = (Button) findViewById(R.id.buttonRegistration);
+
+		editTextFunction = (EditText) findViewById(R.id.editTextFormula);
+		
+		textViewRegUser = (TextView) findViewById(R.id.textViewRegUser);
+		editTextXStart = (EditText) findViewById(R.id.editTextXstart);
+		editTextXEnd = (EditText) findViewById(R.id.editTextXend);
+		graphicView = (GraphicView) findViewById(R.id.graphicView);
 		graphicView.setOutHandler(mainActivityHandler);
 
+		textViewInfoBox = (TextView) findViewById(R.id.textViewInfoBox);
+
+		
+		Log.i("Main activity", "Init spinner");
 		// ---------------Spinner Lines---
 
 		ArrayList<SpinnerItemLines> aList = new ArrayList<SpinnerItemLines>();
@@ -190,16 +196,21 @@ public class MainActivity extends ActionBarActivity {
 			public void onTextChanged(CharSequence s, int start, int before, int count) {
 			}
 		});
-
+		//----------read preferencrs--------------
+		Log.i("Main activity", "Read preferces");
 		formulaDrawPreferences = getSharedPreferences(FDConstants.APP_PREFERENCES, getApplicationContext().MODE_PRIVATE);
 		for (int i = 0; i < FDConstants.colorSpinnerLines.length; i++) {
 			String s = "";
 			if (i == 0)
 				s = "x*x+x";
+			
 			formulaDrawController.setFormulas(
 					formulaDrawPreferences.getString(FDConstants.APP_PREFERENCES_TEXTFormula + i, s), i);
+					
 			// formulaDrawController.setFormulas("",i);
 		}
+		
+		
 		// editTextFunction.setText(formulaDrawController.getFormulas(spinnerLine.getSelectedItemPosition()));
 		// --------------- Find Root-------------
 		buttonRoot.setOnClickListener(new OnClickListener() {
@@ -255,15 +266,10 @@ public class MainActivity extends ActionBarActivity {
 			@Override
 			public void onClick(View v) {
 
-				try {
-					textViewResult.setText(new Double(formulaDrawController.cakulator(editTextFunction.getText()
-							.toString(), /* xVal */
-							0.0)).toString());
-				} catch (ArithmeticException e) {
-					Toast.makeText(getApplicationContext(), getString(R.string.mathError), Toast.LENGTH_LONG).show();
-					textViewResult.setText("");
-				}
 
+					formulaDrawController.cakulator(editTextFunction.getText().toString(),0.0);
+
+				
 			}
 
 		});

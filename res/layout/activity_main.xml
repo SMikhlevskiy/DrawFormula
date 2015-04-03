@@ -15,11 +15,12 @@
             android:id="@+id/textViewFormula"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="10dp"
+            android:layout_marginLeft="12dp"
             android:text="@string/textFormula" />
 
         <Spinner
             android:id="@+id/spinnerLine"
+            android:layout_marginLeft="12dp"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content" />
     </LinearLayout>
@@ -31,28 +32,12 @@
 
         <EditText
             android:id="@+id/editTextFormula"
-            android:layout_width="220dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="10dp"
             android:ems="50"
             android:text="@string/startFormula" >
         </EditText>
-
-        <Button
-            android:id="@+id/buttonCalck"
-            android:layout_width="35dp"
-            android:layout_height="40dp"
-            android:background="@drawable/roundedbutton"
-            android:drawableLeft="@drawable/calck"
-            android:text="" />
-
-        <TextView
-            android:id="@+id/textViewResult"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text=""
-            android:textColor="#000000"
-            android:textSize="17sp" />
     </LinearLayout>
 
     <LinearLayout
@@ -115,10 +100,20 @@
         android:orientation="horizontal" >
 
         <Button
-            android:id="@+id/buttonRoot"
+            android:id="@+id/buttonCalck"
             android:layout_width="wrap_content"
             android:layout_height="35dp"
             android:layout_marginLeft="10dp"
+            android:background="@drawable/roundedbutton"
+            android:gravity="left|center_vertical"
+            android:text="@string/calculator"
+            android:textStyle="bold|italic" />
+
+        <Button
+            android:id="@+id/buttonRoot"
+            android:layout_width="wrap_content"
+            android:layout_height="35dp"
+            android:layout_marginLeft="2dp"
             android:background="@drawable/roundedbutton"
             android:gravity="left|center_vertical"
             android:text="@string/findRoot"
@@ -133,6 +128,19 @@
             android:gravity="left|center_vertical"
             android:text="@string/calcIntegral"
             android:textStyle="bold|italic" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal" >
+
+        <TextView
+            android:id="@+id/textViewInfoBox"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:text="" />
     </LinearLayout>
 
     <LinearLayout
@@ -157,12 +165,5 @@
             android:layout_marginLeft="10dp"
             android:text="@string/notRegistredUser" />
     </LinearLayout>
-
-    <TextView
-        android:id="@+id/textViewInfoBox"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="10dp"
-        android:text="" />
 
 </LinearLayout>

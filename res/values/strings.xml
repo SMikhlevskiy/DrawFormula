@@ -9,6 +9,8 @@
     <string name="drawGraph">График</string>
     <string name="beginGraph">Начало</string>
     <string name="endGraph">Конец</string>
+	
+	<string name="calculator">Калькулятор</string>
     <string name="findRoot">Корень</string>
     <string name="calcIntegral">Интеграл</string>
     <string name="registration">Регистрация</string>
