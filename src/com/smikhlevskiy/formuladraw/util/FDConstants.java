@@ -6,7 +6,9 @@ import android.graphics.Color;
 public abstract  class FDConstants {
 
 	//------------Main Handler messages-----
-	public static final int OUT_TEXT_MESSAGE=1;
+	public static final int OUT_TEXT_INFO_MESSAGE=1;
+	public static final int OUT_TEXT_ERROR_MESSAGE=2;
+	public static final int CHANGE_XLIMITS=3;
 	//------------type SelectFormula--------
 	
 	public static final int LOAD_FORMULA = 1;

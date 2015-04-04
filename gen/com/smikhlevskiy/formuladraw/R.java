@@ -1897,6 +1897,7 @@ containing a value of this type.
         public static final int drawGraph=0x7f0a0015;
         public static final int eMail=0x7f0a0022;
         public static final int endGraph=0x7f0a0017;
+        public static final int errorDiapazon=0x7f0a003c;
         public static final int errorEmail=0x7f0a0027;
         public static final int errorLogin=0x7f0a0025;
         public static final int errorPassword=0x7f0a0026;

@@ -20,39 +20,58 @@ public class MathUtility {
 	private int numParse;
 	private Handler outHandler;
 
-	
-
 	private MyAsynkTask mt;
 
 	public void calckIntegral(Context context, String textFormula, double xStart, double xEnd, int numParse) {
+		if (xStart >= xEnd) {
+			Message message = outHandler.obtainMessage();
+			message.what = FDConstants.OUT_TEXT_ERROR_MESSAGE;
+			message.obj = context.getString(R.string.errorDiapazon);
+			outHandler.sendMessage(message);
+			return;
+		}
+
 		this.context = context;
 		this.textFormula = textFormula;
 		this.xStart = xStart;
 		this.xEnd = xEnd;
 		this.numParse = numParse;
-		double step = 1.0*(xEnd-xStart) / numParse;
-		
+		double step = 1.0 * (xEnd - xStart) / numParse;
 
 		ReversePolishNotation rpn = new ReversePolishNotation();
 		rpn.setFormula(textFormula);
 		rpn.compile();
-		
+
 		double sum = 0;
-		for (int i=0;i<numParse;i++){
-			double x=xStart+i*step;
-			sum = sum + step * (rpn.cackulation(x) + rpn.cackulation(x + step)) / 2;
+		for (int i = 0; i < numParse; i++) {
+			double x = xStart + i * step;
+			try {
+				sum = sum + step * (rpn.calculation(x) + rpn.calculation(x + step)) / 2;
+			} catch (ArithmeticException e) {
+				Message message = outHandler.obtainMessage();
+				message.obj = new String(context.getString(R.string.mathError));
+				message.what = FDConstants.OUT_TEXT_ERROR_MESSAGE;
+				outHandler.sendMessage(message);
+				return;
+			}
+
 		}
-		
-		Message message=outHandler.obtainMessage();
-		message.what=FDConstants.OUT_TEXT_MESSAGE;
-		message.obj=new String(context.getString(R.string.integral) + sum);
+
+		Message message = outHandler.obtainMessage();
+		message.what = FDConstants.OUT_TEXT_INFO_MESSAGE;
+		message.obj = new String(context.getString(R.string.integral) + sum);
 		outHandler.sendMessage(message);
-		
-		
 
 	}
 
 	public void findRoot(Context context, String textFormula, double xStart, double xEnd, double eps) {
+		if (xStart >= xEnd) {
+			Message message = outHandler.obtainMessage();
+			message.what = FDConstants.OUT_TEXT_ERROR_MESSAGE;
+			message.obj = context.getString(R.string.errorDiapazon);
+			outHandler.sendMessage(message);
+			return;
+		}
 		this.context = context;
 		this.textFormula = textFormula;
 		this.xStart = xStart;
@@ -84,15 +103,25 @@ public class MathUtility {
 			double y2;
 
 			for (int i = 0; i <= 10000000; i++) {// Bounce protection
-				y1 = rpn.cackulation(x1);
-				y2 = rpn.cackulation(x2);
+				try {
+					y1 = rpn.calculation(x1);
+					y2 = rpn.calculation(x2);
+				} catch (ArithmeticException e) {
+					return null;
+				}
+
 				if (Math.abs(y1) < eps)
 					return y1;
 				if (Math.abs(y2) < eps)
 					return y2;
 
 				double x = x1 + (x2 - x1) / 2;
-				double y = rpn.cackulation(x);
+				double y;
+				try {
+					y = rpn.calculation(x);
+				} catch (ArithmeticException e) {
+					return null;
+				}
 
 				if (Math.abs(y) < eps)
 					return x;
@@ -116,17 +145,19 @@ public class MathUtility {
 		@Override
 		protected void onPostExecute(Double result) {
 			super.onPostExecute(result);
-			String outStringMessage;
-			if (result == null)
-				outStringMessage=context.getString(R.string.rootBad);
-			else
-				outStringMessage=context.getString(R.string.rootOk) + result;
-			Message message=outHandler.obtainMessage();
-			message.what=FDConstants.OUT_TEXT_MESSAGE;
-			message.obj=outStringMessage;
-			outHandler.sendMessage(message);				
+			Message message = outHandler.obtainMessage();
+			if (result == null) {
+				message.what = FDConstants.OUT_TEXT_ERROR_MESSAGE;
+				message.obj = context.getString(R.string.rootBad);
+			} else {
+				message.what = FDConstants.OUT_TEXT_INFO_MESSAGE;
+				message.obj = context.getString(R.string.rootOk) + result;
+			}
+
+			outHandler.sendMessage(message);
 		}
 	}
+
 	public void setOutHandler(Handler outHandler) {
 		this.outHandler = outHandler;
 	}

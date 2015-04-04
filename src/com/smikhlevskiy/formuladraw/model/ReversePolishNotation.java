@@ -227,7 +227,7 @@ public class ReversePolishNotation {
 	}
 
 	// ---------------Calckulation f(x)------------------------
-	public double cackulation(double x) {
+	public double calculation(double x) {
 		try {
 
 			if (lexPolish == null)

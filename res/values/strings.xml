@@ -49,5 +49,7 @@
     <string name="rootOk">Корень найден, x=</string>
     <string name="rootBad">Корень не найден</string>
     <string name="integral">Интеграл=</string>
+    
+    <string name="errorDiapazon">Ошибка диапазона</string>
 
 </resources>

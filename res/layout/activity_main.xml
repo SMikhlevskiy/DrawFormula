@@ -58,30 +58,32 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="10dp"
+            android:layout_marginLeft="5dp"
             android:text="@string/beginGraph" />
 
         <EditText
             android:id="@+id/editTextXstart"
-            android:layout_width="60dp"
+            android:layout_width="80dp"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="10dp"
+            android:layout_marginLeft="1dp"
             android:ems="10"
+            android:inputType="number"
             android:text="-10" >
         </EditText>
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="10dp"
+            android:layout_marginLeft="5dp"
             android:text="@string/endGraph" />
 
         <EditText
             android:id="@+id/editTextXend"
-            android:layout_width="60dp"
+            android:layout_width="80dp"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="10dp"
+            android:layout_marginLeft="1dp"
             android:ems="10"
+            android:inputType="number"
             android:text="10" >
         </EditText>
     </LinearLayout>

@@ -4,6 +4,9 @@ package com.smikhlevskiy.formuladraw.ui;
  * Draw Graphic on View
  * 
  */
+import java.text.DecimalFormat;
+import java.text.NumberFormat;
+
 import com.smikhlevskiy.formuladraw.model.ReversePolishNotation;
 import com.smikhlevskiy.formuladraw.util.FDConstants;
 import com.smikhlevskiy.formuladraw.util.ScaleCoordinates;
@@ -176,7 +179,7 @@ public class GraphicView extends View {
 			double x = xMin + 1.0 * xi * (xMax - xMin) / this.getWidth();
 			double y = 0;
 			try {
-				y = reversePolishNotation[i].cackulation(x);
+				y = reversePolishNotation[i].calculation(x);
 
 			} catch (ArithmeticException e) {
 
@@ -268,7 +271,7 @@ public class GraphicView extends View {
 										// this.getWidth();
 			double y1 = 0;
 			try {
-				y1 = reversePolishNotation[i].cackulation(x1);
+				y1 = reversePolishNotation[i].calculation(x1);
 			} catch (ArithmeticException e) {
 				continue;
 			}
@@ -276,7 +279,7 @@ public class GraphicView extends View {
 											// xMin) / this.getWidth();
 			double y2 = 0;
 			try {
-				y2 = reversePolishNotation[i].cackulation(x2);
+				y2 = reversePolishNotation[i].calculation(x2);
 			} catch (ArithmeticException e) {
 				continue;
 			}
@@ -296,9 +299,25 @@ public class GraphicView extends View {
  */
 	private void outXY(float xDown, float yDown) {
 		Message message=outHandler.obtainMessage();
-		message.what=FDConstants.OUT_TEXT_MESSAGE;
-		message.obj=new String( "x="+xDown+", y="+yDown);
+		message.what=FDConstants.OUT_TEXT_INFO_MESSAGE;
+		
+		NumberFormat formatter = new DecimalFormat("#0.00");
+		
+		message.obj=new String( "x="+formatter.format(sc.getFX(xDown))+", y="+formatter.format(sc.getFY(yDown)));
 		outHandler.sendMessage(message);
+	}
+/**
+ * 
+ */
+	private void outMessageOnChangeXMinMax(){
+		Message message=outHandler.obtainMessage();
+		message.what=FDConstants.CHANGE_XLIMITS;
+		double xMinMaxa[]=new double[2];
+		xMinMaxa[0]=xMin;
+		xMinMaxa[1]=xMax;
+		message.obj=xMinMaxa;
+		outHandler.sendMessage(message);
+		
 	}
 
 	/**
@@ -358,6 +377,7 @@ public class GraphicView extends View {
 					xMin = xMin - step / 2;
 					xMax = xMax + step / 2;
 					sc.setFunctionArea(xMin, yMin, xMax - xMin, yMax - yMin);
+					outMessageOnChangeXMinMax();
 					invalidate();
 
 				}
@@ -367,6 +387,7 @@ public class GraphicView extends View {
 					yMin = yMin - step / 2;
 					yMax = yMax + step / 2;
 					sc.setFunctionArea(xMin, yMin, xMax - xMin, yMax - yMin);
+					outMessageOnChangeXMinMax();
 					invalidate();
 
 				}
@@ -394,6 +415,7 @@ public class GraphicView extends View {
 				// xMin=xMin+xTouchOld-x;
 				// xMax=xMax+xTouchOld-x;
 				sc.setFunctionArea(xMin, yMin, xMax - xMin, yMax - yMin);
+				outMessageOnChangeXMinMax();
 				invalidate();
 
 			}
@@ -402,6 +424,7 @@ public class GraphicView extends View {
 				yMin = yMin - step;
 				yMax = yMax - step;
 				sc.setFunctionArea(xMin, yMin, xMax - xMin, yMax - yMin);
+				outMessageOnChangeXMinMax();
 				invalidate();
 
 			}
@@ -412,16 +435,5 @@ public class GraphicView extends View {
 
 		return true;
 	}
-
-	
-private void GraphicOutString(Canvas canvas, String s){
-	Paint mPaint = new Paint();
-	mPaint.setColor(Color.rgb(100, 100, 100));
-	mPaint.setTextSize(20);
-	Rect    bounds = new Rect();
-	mPaint.getTextBounds(s, 0, s.length(), bounds);
-	
-	canvas.drawText(s,getWidth()-bounds.width(),getHeight()-bounds.height(),mPaint);	
-}
 
 }
