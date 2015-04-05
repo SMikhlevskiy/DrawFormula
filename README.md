@@ -11,7 +11,7 @@
 10) Сalculator conversion of physical quantities(TO-DO).  
   
   
-Main Screen
+Main Screen  
 ![Main Screen](readme_img/main_screen.bmp)
   
 List of functions    
