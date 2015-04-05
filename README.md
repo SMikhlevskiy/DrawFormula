@@ -9,7 +9,10 @@
 8) Send graphics view by Email (TO-DO).  
 9) Function approximation of the user data table with possibility out graphics(TO-DO).  
 10) Сalculator conversion of physical quantities(TO-DO).  
+  
+  
 Main Screen
-
 ![Main Screen](readme_img/main_screen.bmp)
-
+  
+List of functions    
+![Main Screen](readme_img/main_screen.bmp)
