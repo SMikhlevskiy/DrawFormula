@@ -309,7 +309,8 @@ public class MainActivity extends ActionBarActivity {
 		Log.i("Main Activity", "Save Preferences");
 		// Save text formula
 		// formulaDrawController.saveFormula(editTextFunction.getText().toString());
-		formulaDrawController.saveWorkspace();
+
+		formulaDrawController.saveWorkspace(editTextXStart.getText().toString(), editTextXEnd.getText().toString());
 
 		super.onPause();
 
@@ -403,18 +404,12 @@ public class MainActivity extends ActionBarActivity {
 		Log.i("Main Activity", "OnActivityResult");
 		// --------Get Function from ActivitySelectFunction--------------
 		if (data != null) {
-			if ((requestCode == FDConstants.ADD_FUNCTION) || (requestCode == FDConstants.ADD_USER_FUNCTION)) {
-				String textFormula = data.getStringExtra("name").toLowerCase();
-				ReversePolishNotation rpn = new ReversePolishNotation();
-				rpn.setFormula(textFormula);
-				if ((rpn.textToFunction(textFormula) == FDConstants.TypeFunction.XVALUE)
-						|| (rpn.textToFunction(textFormula) == FDConstants.TypeFunction.E)
-						|| (rpn.textToFunction(textFormula) == FDConstants.TypeFunction.Pi))
-					editTextFunction.setText(editTextFunction.getText() + textFormula);
-				else
-					editTextFunction.setText(editTextFunction.getText() + textFormula + "(x)");
-			} else if (requestCode == FDConstants.LOAD_FORMULA)
-				editTextFunction.setText(data.getStringExtra("formula"));
+
+			if ((requestCode == FDConstants.ADD_FUNCTION) || (requestCode == FDConstants.ADD_USER_FUNCTION))
+				editTextFunction.setText(editTextFunction.getText()
+						+ formulaDrawController.formFunctionInsert(data.getStringExtra("name").toLowerCase()));
+			else if (requestCode == FDConstants.LOAD_FORMULA)
+				editTextFunction.setText(data.getStringExtra("name").toLowerCase());
 
 			drawGraphic();
 		}

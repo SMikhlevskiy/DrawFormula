@@ -9,7 +9,9 @@ import java.text.NumberFormat;
 
 import com.smikhlevskiy.formuladraw.model.ReversePolishNotation;
 import com.smikhlevskiy.formuladraw.util.FDConstants;
-import com.smikhlevskiy.formuladraw.util.ScaleCoordinates;
+
+
+import com.smikhlevskiy.formuladraw.util.ScaleСoordinates;
 
 import android.content.Context;
 import android.graphics.Canvas;
@@ -42,7 +44,7 @@ public class GraphicView extends View {
 	private float lastDtX = 0;
 	private float lastDtY = 0;
 	private boolean drawCustomCanvas = false;
-	private ScaleCoordinates sc = new ScaleCoordinates();
+	private ScaleСoordinates sc = new ScaleСoordinates();
 	
 	private Handler outHandler;
 

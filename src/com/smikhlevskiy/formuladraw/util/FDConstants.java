@@ -20,6 +20,7 @@ public abstract  class FDConstants {
 	public static final String APP_PREFERENCES = "fdpreferences";
 	public static final String APP_PREFERENCES_TEXTFormula = "formula";
 	
+	
 	//---------------functions--------------------------
 	public static final String[][] AVAILABLE_FUNCTIONS={
 		{"abs","модуль"},
