@@ -409,7 +409,7 @@ public class MainActivity extends ActionBarActivity {
 				editTextFunction.setText(editTextFunction.getText()
 						+ formulaDrawController.formFunctionInsert(data.getStringExtra("name").toLowerCase()));
 			else if (requestCode == FDConstants.LOAD_FORMULA)
-				editTextFunction.setText(data.getStringExtra("name").toLowerCase());
+				editTextFunction.setText(data.getStringExtra("formula").toLowerCase());
 
 			drawGraphic();
 		}
