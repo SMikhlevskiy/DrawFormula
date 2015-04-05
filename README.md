@@ -15,4 +15,4 @@ Main Screen
 ![Main Screen](readme_img/main_screen.bmp)
   
 List of functions    
-![List functions](readme_img/listfunctions.bmp)
+![List functions](readme_img/functions_list.bmp)
