@@ -4,7 +4,7 @@ package com.smikhlevskiy.formuladraw.util;
  * converts screen coordinates to function coordinates && 
  * converts function coordinates to screen  coordinates
  */
-public class scaleСoordinates {
+public class ScaleСoordinates {
 	// ----------Screen area---
 	private float dpXStart = 0;
 	private float dpYStart = 0;
