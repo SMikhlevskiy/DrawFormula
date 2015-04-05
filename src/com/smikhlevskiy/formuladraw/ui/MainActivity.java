@@ -217,13 +217,13 @@ public class MainActivity extends ActionBarActivity {
 			@Override
 			public void onClick(View v) {
 				textViewInfoBox.setText("");
-				MathUtility mathUtility = new MathUtility();
-				mathUtility.setOutHandler(mainActivityHandler);
+				MathUtility mathUtility = new MathUtility(getApplicationContext(), mainActivityHandler,
+						editTextFunction.getText().toString());
+
 				if ((editTextXStart.getText().toString().length() > 0)
 						&& (editTextXEnd.getText().toString().length() > 0))
-					mathUtility.findRoot(getApplicationContext(), editTextFunction.getText().toString(), new Double(
-							editTextXStart.getText().toString()), new Double(editTextXEnd.getText().toString()),
-							(double) 0.000001);
+					mathUtility.findRoot(new Double(editTextXStart.getText().toString()), new Double(editTextXEnd
+							.getText().toString()), (double) 0.000001);
 				else
 					textViewInfoBox.setText(getString(R.string.errorDiapazon));
 			}
@@ -233,14 +233,14 @@ public class MainActivity extends ActionBarActivity {
 			@Override
 			public void onClick(View v) {
 				textViewInfoBox.setText("");
-				MathUtility mathUtility = new MathUtility();
-				mathUtility.setOutHandler(mainActivityHandler);
+				MathUtility mathUtility = new MathUtility(getApplicationContext(), mainActivityHandler,
+						editTextFunction.getText().toString());
+
 				if ((editTextXStart.getText().toString().length() > 0)
 						&& (editTextXEnd.getText().toString().length() > 0))
 
-					mathUtility.calckIntegral(getApplicationContext(), editTextFunction.getText().toString(),
-							new Double(editTextXStart.getText().toString()), new Double(editTextXEnd.getText()
-									.toString()), 10000);
+					mathUtility.calcIntegral(new Double(editTextXStart.getText().toString()), new Double(editTextXEnd
+							.getText().toString()), 10000);
 				else
 					textViewInfoBox.setText(getString(R.string.errorDiapazon));
 
@@ -305,6 +305,8 @@ public class MainActivity extends ActionBarActivity {
 
 	@Override
 	protected void onPause() {
+		Log.i("Main Activity", "OnPause");
+		Log.i("Main Activity", "Save Preferences");
 		// Save text formula
 		// formulaDrawController.saveFormula(editTextFunction.getText().toString());
 		formulaDrawController.saveWorkspace();
@@ -315,6 +317,7 @@ public class MainActivity extends ActionBarActivity {
 
 	@Override
 	protected void onResume() {
+		Log.i("Main Activity", "OnResume");
 		drawUserInfo();// Draw user info after closing Registration form
 		super.onResume();
 
@@ -351,6 +354,7 @@ public class MainActivity extends ActionBarActivity {
 		}
 
 		case R.id.saveFormula: {
+
 			ParseUser user = ParseUser.getCurrentUser();
 			if (user != null) {
 
@@ -396,7 +400,8 @@ public class MainActivity extends ActionBarActivity {
 
 	@Override
 	public void onActivityResult(int requestCode, int resultCode, Intent data) {
-
+		Log.i("Main Activity", "OnActivityResult");
+		// --------Get Function from ActivitySelectFunction--------------
 		if (data != null) {
 			if ((requestCode == FDConstants.ADD_FUNCTION) || (requestCode == FDConstants.ADD_USER_FUNCTION)) {
 				String textFormula = data.getStringExtra("name").toLowerCase();

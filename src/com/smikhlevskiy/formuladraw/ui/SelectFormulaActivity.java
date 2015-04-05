@@ -1,3 +1,6 @@
+/*
+ * Activity for Select Formula by List
+ */
 package com.smikhlevskiy.formuladraw.ui;
 
 import java.util.ArrayList;

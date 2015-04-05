@@ -1,5 +1,8 @@
 package com.smikhlevskiy.formuladraw.adapters;
-
+/**
+ * Adapter for SelectFormulaList 
+ * NameFormula, TextFormula 
+ */
 import java.util.ArrayList;
 
 import android.app.Activity;

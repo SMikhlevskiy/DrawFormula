@@ -1,5 +1,7 @@
 package com.smikhlevskiy.formuladraw.model;
-
+/*
+ * To do
+ */
 import android.content.Context;
 import android.content.SharedPreferences;
 

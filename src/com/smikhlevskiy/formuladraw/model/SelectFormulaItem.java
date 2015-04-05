@@ -1,3 +1,6 @@
+/*
+ * Item of SelectFormula List
+ */
 package com.smikhlevskiy.formuladraw.model;
 
 public class SelectFormulaItem

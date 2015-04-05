@@ -1,5 +1,7 @@
 package com.smikhlevskiy.formuladraw.entity;
-
+/*
+ * Core of Formula Draw
+ */
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Handler;
@@ -22,8 +24,10 @@ public class FormulaDrawController {
 	private SharedPreferences formulaDrawPreferences;
 	private int currentLine = 0;
 
-	private FormulaDrawBaseData formulaDrawBaseData;
-
+	private FormulaDrawBaseData formulaDrawBaseData;// To-DO
+/*
+ * ---------------------
+ */
 	public FormulaDrawController(Context context, Handler outHandler) {
 		super();
 		this.context = context;
@@ -32,7 +36,9 @@ public class FormulaDrawController {
 
 		// TODO Auto-generated constructor stub
 	}
-
+/*
+ * Draw Graphic on GraphicView
+ */
 	public void drawGraphic(GraphicView graphicView, String textFormula, double xStart, double xEnd) {
 
 		if (xStart >= xEnd) {
@@ -55,7 +61,9 @@ public class FormulaDrawController {
 		graphicView.setDrawCustomCanvas(true);
 		graphicView.invalidate();
 	}
-
+/*
+ * Cack Value f(x) and send result to MainActivity by Handler
+ */
 	public void cakulator(String textFormula, double x) {
 		ReversePolishNotation reversePolishNotation = new ReversePolishNotation();
 		reversePolishNotation.setFormula(textFormula);
@@ -90,7 +98,8 @@ public class FormulaDrawController {
 	}
 
 	/**
-	 * Read Prefereces
+	 * --------Read Prefereces--------------
+	 * Text formulas
 	 */
 	public void readPreferences() {
 		formulaDrawPreferences = context.getSharedPreferences(FDConstants.APP_PREFERENCES, context.MODE_PRIVATE);
@@ -107,7 +116,8 @@ public class FormulaDrawController {
 
 	/**
 	 * 
-	 * 
+	 * ------Save Preferences
+	 * Text formulas
 	 */
 	public void saveUserFunction(String name, String textFunction) {
 		ParseUser user = ParseUser.getCurrentUser();

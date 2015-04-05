@@ -1,5 +1,8 @@
 package com.smikhlevskiy.formuladraw.model;
-
+/*
+ * Utility for work with formulas
+ * Calculate Integral & Find Root
+ */
 import java.util.concurrent.TimeUnit;
 
 import com.smikhlevskiy.formuladraw.R;
@@ -19,10 +22,21 @@ public class MathUtility {
 	private double eps;
 	private int numParse;
 	private Handler outHandler;
-
 	private MyAsynkTask mt;
+	/*
+	 * 
+	 */
+	public MathUtility(Context context,Handler outHandler,String textFormula){
+		this.context=context;
+		this.outHandler=outHandler;
+		this.textFormula=textFormula;
+		
+	}
 
-	public void calckIntegral(Context context, String textFormula, double xStart, double xEnd, int numParse) {
+	/*
+	 * calculate Integral and send message to MainAcivity
+	 */
+	public void calcIntegral(double xStart, double xEnd, int numParse) {
 		if (xStart >= xEnd) {
 			Message message = outHandler.obtainMessage();
 			message.what = FDConstants.OUT_TEXT_ERROR_MESSAGE;
@@ -31,8 +45,6 @@ public class MathUtility {
 			return;
 		}
 
-		this.context = context;
-		this.textFormula = textFormula;
 		this.xStart = xStart;
 		this.xEnd = xEnd;
 		this.numParse = numParse;
@@ -63,8 +75,12 @@ public class MathUtility {
 		outHandler.sendMessage(message);
 
 	}
+	/*
+	 * find Root in AsyncTask and send message to MainAcivity 
+	 *  
+	 */
 
-	public void findRoot(Context context, String textFormula, double xStart, double xEnd, double eps) {
+	public void findRoot(double xStart, double xEnd, double eps) {
 		if (xStart >= xEnd) {
 			Message message = outHandler.obtainMessage();
 			message.what = FDConstants.OUT_TEXT_ERROR_MESSAGE;
@@ -72,8 +88,6 @@ public class MathUtility {
 			outHandler.sendMessage(message);
 			return;
 		}
-		this.context = context;
-		this.textFormula = textFormula;
 		this.xStart = xStart;
 		this.xEnd = xEnd;
 		this.eps = eps;
@@ -158,7 +172,5 @@ public class MathUtility {
 		}
 	}
 
-	public void setOutHandler(Handler outHandler) {
-		this.outHandler = outHandler;
-	}
+	
 }

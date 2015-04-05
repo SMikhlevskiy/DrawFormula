@@ -1,5 +1,10 @@
 package com.smikhlevskiy.formuladraw.model;
-
+/*
+ * 1) Compile text formula
+ * 2) Find Error
+ * 3) Convert to Reverse Polish Notation
+ * 4) Find Values
+ */
 import java.util.ArrayList;
 
 import com.smikhlevskiy.formuladraw.util.FDConstants;

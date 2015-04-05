@@ -1,3 +1,7 @@
+/*
+ * Item of SelectLine Spinner
+ */
+
 package com.smikhlevskiy.formuladraw.model;
 
 public class SpinnerItemLines {

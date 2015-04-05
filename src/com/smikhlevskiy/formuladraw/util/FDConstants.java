@@ -62,5 +62,5 @@ public abstract  class FDConstants {
 		XVALUE, ERROR
 	};
 
-	public static int[] colorSpinnerLines = { Color.BLUE, Color.RED, Color.GREEN, Color.MAGENTA, Color.YELLOW, Color.BLACK };
+	public static int[] colorSpinnerLines = { Color.BLUE, Color.RED, Color.GREEN, Color.MAGENTA,Color.rgb(255, 128, 0), Color.BLACK };
 }

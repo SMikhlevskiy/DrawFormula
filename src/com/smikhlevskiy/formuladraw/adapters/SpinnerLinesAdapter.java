@@ -1,5 +1,7 @@
 package com.smikhlevskiy.formuladraw.adapters;
-
+/*
+ * Adapter for SelectLine Spinner
+ */
 import java.util.ArrayList;
 
 import android.app.Activity;
