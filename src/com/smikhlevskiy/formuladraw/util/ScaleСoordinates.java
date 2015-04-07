@@ -6,10 +6,10 @@ package com.smikhlevskiy.formuladraw.util;
  */
 public class ScaleСoordinates {
 	// ----------Screen area---
-	private float dpXStart = 0;
-	private float dpYStart = 0;
-	private float dpWidth = 0;
-	private float dpHeight = 0;
+	private double dpXStart = 0;
+	private double dpYStart = 0;
+	private double dpWidth = 0;
+	private double dpHeight = 0;
 	// ----------f(x) area---
 	private double fXStart = 0;
 	private double fYStart = 0;
@@ -18,18 +18,18 @@ public class ScaleСoordinates {
 	// -------Attribut of out function from Down to Up, or from Up to down
 	private boolean fromDownToUp = true;
 
-	public float getDpX(double fX) {
-		return (float) (dpXStart + dpWidth * (fX - fXStart) / fWidth);
+	public double getDpX(double fX) {
+		return (1.0*dpXStart + 1.0*dpWidth * (fX - fXStart)/ fWidth );
 	}
 
-	public float getDpY(double fY) {
+	public double getDpY(double fY) {
 		// double yi1 = 1.0 * this.getHeight() - 1.0 * (y1 - yMin) *
 		// this.getHeight() / (yMax - yMin);
 
 		if (fromDownToUp)
-			return (float) (dpYStart + dpHeight - dpHeight * (fY - fYStart) / fHeight);
+			return (double) (dpYStart + dpHeight - dpHeight * (fY - fYStart) / fHeight);
 		else
-			return (float) (dpYStart + dpHeight * (fY - fYStart) / fHeight);
+			return (double) (dpYStart + dpHeight * (fY - fYStart) / fHeight);
 	}
 
 	public double getFX(double dpX) {
@@ -47,7 +47,7 @@ public class ScaleСoordinates {
 	/*
 	 * Set Coordinates of screen area
 	 */
-	public void setScreenArea(float dpXStart, float dpYStart, float dpWidth, float dpHeight) {
+	public void setScreenArea(double dpXStart, double dpYStart, double dpWidth, double dpHeight) {
 		this.dpXStart = dpXStart;
 		this.dpYStart = dpYStart;
 		this.dpWidth = dpWidth;
