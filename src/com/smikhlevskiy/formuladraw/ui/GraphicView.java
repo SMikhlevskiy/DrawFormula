@@ -10,7 +10,6 @@ import java.text.NumberFormat;
 import com.smikhlevskiy.formuladraw.model.ReversePolishNotation;
 import com.smikhlevskiy.formuladraw.util.FDConstants;
 
-
 import com.smikhlevskiy.formuladraw.util.ScaleСoordinates;
 
 import android.content.Context;
@@ -28,7 +27,7 @@ import android.widget.Toast;
 
 public class GraphicView extends View {
 
-	private ReversePolishNotation reversePolishNotation[]=null;
+	private ReversePolishNotation reversePolishNotation[] = null;
 	private double xMin = 0.0;
 	private double xMax = 0.0;
 	private double yMin = 0.0;
@@ -46,7 +45,7 @@ public class GraphicView extends View {
 	private float lastDtY = 0;
 	private boolean drawCustomCanvas = false;
 	private ScaleСoordinates sc = new ScaleСoordinates();
-	
+
 	private Handler outHandler;
 
 	public void setOutHandler(Handler outHandler) {
@@ -91,8 +90,8 @@ public class GraphicView extends View {
 
 		if (interval <= 0)
 			return 0;
-		double signinteval=Math.signum(interval);
-		interval=Math.abs(interval);
+		double signinteval = Math.signum(interval);
+		interval = Math.abs(interval);
 		// array constants for out scale of graphic
 		double stData[] = { 1, 2, 2.5, 5 };
 		double stTime[] = { 1, 2, 3, 5, 10, 15, 30, 45, 60, 120, 150, 180, 240, 720, 1440, 2880, 7200, 14400, 43200,
@@ -103,7 +102,6 @@ public class GraphicView extends View {
 		else
 			st = stData;
 
-
 		if (!isTime) {
 			int j = 1;
 			while (Math.abs(interval / st[0]) < kMin) {
@@ -111,11 +109,11 @@ public class GraphicView extends View {
 					st[i] = st[i] / 10;
 				j++;
 				if (j > 1000)
-					return signinteval*interval / kMin;// Bounce protection
+					return signinteval * interval / kMin;// Bounce protection
 			}
 
 			j = 1;
-			while (Math.abs(interval / st[st.length-1]) > kMax) {
+			while (Math.abs(interval / st[st.length - 1]) > kMax) {
 				for (int i = 0; i < st.length; i++)
 					st[i] = st[i] * 10;
 				j++;
@@ -124,7 +122,6 @@ public class GraphicView extends View {
 			}
 
 		}
-
 
 		int iOpt = -1;
 		double rOpt = 100000;
@@ -171,19 +168,18 @@ public class GraphicView extends View {
 
 	/**
 	 *   
-	 */ 
-	private void prepareGraphicArea(){
+	 */
+	private void prepareGraphicArea() {
 		sc.setScreenArea(1, 1, getWidth() - 1, getHeight() - 1);
 		sc.setFunctionArea(xMin, yMin, xMax - xMin, yMax - yMin);
 
 		gridXStep = this.calcStepGrid(xMax - xMin, 2, 4, 3, false);
 		gridXStart = this.calckGridBeginPoint(xMin, gridXStep);
-		
-		
+
 		gridYStep = this.calcStepGrid(yMax - yMin, 2, 4, 3, false);
-		gridYStart = this.calckGridBeginPoint(yMin, gridYStep);		
+		gridYStart = this.calckGridBeginPoint(yMin, gridYStep);
 	}
-	
+
 	/**
 	 * set xMin,xMin and calculate yMin&yMax
 	 * 
@@ -194,23 +190,23 @@ public class GraphicView extends View {
 		this.xMax = xMax;
 		yMin = Double.MAX_VALUE;
 		yMax = Double.MIN_VALUE;
-		for (int i = 0; i < FDConstants.colorSpinnerLines.length; i++) 
-		for (int xi = 0; xi <= this.getWidth(); xi++) {
-			double x = xMin + 1.0 * xi * (xMax - xMin) / this.getWidth();
-			double y = 0;
-			try {
-				y = reversePolishNotation[i].calculation(x);
+		for (int i = 0; i < FDConstants.colorSpinnerLines.length; i++)
+			for (int xi = 0; xi <= this.getWidth(); xi++) {
+				double x = xMin + 1.0 * xi * (xMax - xMin) / this.getWidth();
+				double y = 0;
+				try {
+					y = reversePolishNotation[i].calculation(x);
 
-			} catch (ArithmeticException e) {
+				} catch (ArithmeticException e) {
 
-				continue;
+					continue;
+				}
+
+				if (y > yMax)
+					yMax = y;
+				if (y < yMin)
+					yMin = y;
 			}
-
-			if (y > yMax)
-				yMax = y;
-			if (y < yMin)
-				yMin = y;
-		}
 
 		yMax = yMax + 0.1 * (yMax - yMin);
 		yMin = yMin - 0.1 * (yMax - yMin);
@@ -218,7 +214,6 @@ public class GraphicView extends View {
 			yMin = yMin - 10;
 			yMax = yMax + 10;
 		}
-
 
 		prepareGraphicArea();
 
@@ -251,94 +246,95 @@ public class GraphicView extends View {
 		mPaint.setColor(Color.rgb(150, 100, 100));
 		mPaint.setStrokeWidth(3);
 
-		canvas.drawLine(0, (float)sc.getDpY(0), getWidth(), (float)sc.getDpY(0), mPaint);// Draw
-																			// Y=0
-																			// Line
+		canvas.drawLine(0, (float) sc.getDpY(0), getWidth(), (float) sc.getDpY(0), mPaint);// Draw
+		// Y=0
+		// Line
 
-		 canvas.drawLine((float)sc.getDpX(0), 0, (float)sc.getDpX(0), getHeight(), mPaint);// Draw
-																			// X=0
-																			// Line
-		
-		mPaint.setColor(Color.rgb(100, 100, 100));
+		canvas.drawLine((float) sc.getDpX(0), 0, (float) sc.getDpX(0), getHeight(), mPaint);// Draw
+		// X=0
+		// Line
+
 		mPaint.setStrokeWidth(1);
 		mPaint.setTextSize(20);
-//NumberFormat formatter = new DecimalFormat("#0.000");
-		
-		double x=gridXStart;
+		// NumberFormat formatter = new DecimalFormat("#0.000");
+		mPaint.setColor(Color.rgb(50, 50, 50));
+		double x = gridXStart;
 
-		
-		while (x<=xMax){
+		while (x <= xMax) {
 
-			canvas.drawLine((float)sc.getDpX(x), 0, (float)sc.getDpX(x), getHeight(), mPaint);
-			
-			canvas.drawText(x+"",(float)sc.getDpX(x),(float)getHeight()-10,mPaint);
-			x=x+gridXStep;
+			canvas.drawLine((float) sc.getDpX(x), 0, (float) sc.getDpX(x), getHeight(), mPaint);
+			canvas.drawText(x + "", (float) sc.getDpX(x), (float) getHeight() - 10, mPaint);
+			x = x + gridXStep;
 		}
-		double y=gridYStart;
-		while (y<=yMax){
-			canvas.drawLine(0, (float)sc.getDpY(y), getWidth(), (float)sc.getDpY(y), mPaint);
-			if (getHeight()-sc.getDpY(y)>25)
-			canvas.drawText(y+"",0,(float)sc.getDpY(y),mPaint);			
-			y=y+gridYStep;
-		}
-			
+		double y = gridYStart;
+		while (y <= yMax) {
 
-		
+			canvas.drawLine(0, (float) sc.getDpY(y), getWidth(), (float) sc.getDpY(y), mPaint);
+
+			if (getHeight() - sc.getDpY(y) > 25)
+				canvas.drawText(y + "", 0, (float) sc.getDpY(y), mPaint);
+			y = y + gridYStep;
+		}
+
 		mPaint.setStrokeWidth(3);
-		for (int i = 0; i < FDConstants.colorSpinnerLines.length; i++) 
-		for (double fx = 0; fx < this.getWidth(); fx++) {
-			mPaint.setColor(FDConstants.colorSpinnerLines[i]);
-			double x1 = sc.getFX(fx); // xMin + 1.0 * xi * (xMax - xMin) /
-										// this.getWidth();
-			double y1 = 0;
-			try {
-				y1 = reversePolishNotation[i].calculation(x1);
-			} catch (ArithmeticException e) {
-				continue;
-			}
-			double x2 = sc.getFX(fx + 1);// xMin + 1.0 * (xi + 1.0) * (xMax -
-											// xMin) / this.getWidth();
-			double y2 = 0;
-			try {
-				y2 = reversePolishNotation[i].calculation(x2);
-			} catch (ArithmeticException e) {
-				continue;
-			}
+		for (int i = 0; i < FDConstants.colorSpinnerLines.length; i++)
+			for (double fx = 0; fx < this.getWidth(); fx++) {
+				mPaint.setColor(FDConstants.colorSpinnerLines[i]);
+				double x1 = sc.getFX(fx); // xMin + 1.0 * xi * (xMax - xMin) /
+											// this.getWidth();
+				double y1 = 0;
+				try {
+					y1 = reversePolishNotation[i].calculation(x1);
+				} catch (ArithmeticException e) {
+					continue;
+				}
+				double x2 = sc.getFX(fx + 1);// xMin + 1.0 * (xi + 1.0) * (xMax
+												// -
+												// xMin) / this.getWidth();
+				double y2 = 0;
+				try {
+					y2 = reversePolishNotation[i].calculation(x2);
+				} catch (ArithmeticException e) {
+					continue;
+				}
 
-			canvas.drawLine((float) fx, (float)sc.getDpY(y1), (float) (fx + 1.0), (float)sc.getDpY(y2), mPaint);// draw
-																									// f(x)
-																									// to
-																									// f(x+1)
+				canvas.drawLine((float) fx, (float) sc.getDpY(y1), (float) (fx + 1.0), (float) sc.getDpY(y2), mPaint);// draw
+				// f(x)
+				// to
+				// f(x+1)
 
-		}
+			}
 
 	}
-/**
- * Out XY in main Activity
- * @param xDown
- * @param yDown
- */
+
+	/**
+	 * Out XY in main Activity
+	 * 
+	 * @param xDown
+	 * @param yDown
+	 */
 	private void outXY(float xDown, float yDown) {
-		Message message=outHandler.obtainMessage();
-		message.what=FDConstants.OUT_TEXT_INFO_MESSAGE;
-		
+		Message message = outHandler.obtainMessage();
+		message.what = FDConstants.OUT_TEXT_INFO_MESSAGE;
+
 		NumberFormat formatter = new DecimalFormat("#0.00");
-		
-		message.obj=new String( "x="+formatter.format(sc.getFX(xDown))+", y="+formatter.format(sc.getFY(yDown)));
+
+		message.obj = new String("x=" + formatter.format(sc.getFX(xDown)) + ", y=" + formatter.format(sc.getFY(yDown)));
 		outHandler.sendMessage(message);
 	}
-/**
+
+	/**
  * 
  */
-	private void outMessageOnChangeXMinMax(){
-		Message message=outHandler.obtainMessage();
-		message.what=FDConstants.CHANGE_XLIMITS;
-		double xMinMaxa[]=new double[2];
-		xMinMaxa[0]=xMin;
-		xMinMaxa[1]=xMax;
-		message.obj=xMinMaxa;
+	private void outMessageOnChangeXMinMax() {
+		Message message = outHandler.obtainMessage();
+		message.what = FDConstants.CHANGE_XLIMITS;
+		double xMinMaxa[] = new double[2];
+		xMinMaxa[0] = xMin;
+		xMinMaxa[1] = xMax;
+		message.obj = xMinMaxa;
 		outHandler.sendMessage(message);
-		
+
 	}
 
 	/**
@@ -356,13 +352,12 @@ public class GraphicView extends View {
 
 		switch (actionMask) {
 		case MotionEvent.ACTION_DOWN:
-			
+
 			float xDown = event.getX();
 			float yDown = event.getY();
-			
-			//Toast.makeText(getContext(), "x="+x+", y="+y,0).show();
+
+			// Toast.makeText(getContext(), "x="+x+", y="+y,0).show();
 			outXY(xDown, yDown);
-			
 
 			// inTouch = true;
 			break;
@@ -383,10 +378,9 @@ public class GraphicView extends View {
 			float x = event.getX();
 			float y = event.getY();
 			outXY(x, y);
-			
-			//Toast.makeText(getContext(), "x="+x+", y="+y,0).show();
-			
-			
+
+			// Toast.makeText(getContext(), "x="+x+", y="+y,0).show();
+
 			// -----------scale ----------------
 			if ((pointerCount >= 2) && (lastPointerCount > 1)) {
 				float dtY = Math.abs(event.getY(0) - event.getY(1));

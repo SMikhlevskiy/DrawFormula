@@ -6,24 +6,20 @@ import java.util.ArrayList;
 
 import com.smikhlevskiy.formuladraw.ui.UserRegActivity;
 import com.smikhlevskiy.formuladraw.util.FDConstants;
-import com.parse.ParseObject;
 import com.parse.ParseUser;
-import com.smikhlevskiy.formuladraw.adapters.SelectFormulaAdapter;
 import com.smikhlevskiy.formuladraw.adapters.SpinnerLinesAdapter;
 import com.smikhlevskiy.formuladraw.entity.FormulaDrawController;
 import com.smikhlevskiy.formuladraw.model.MathUtility;
-import com.smikhlevskiy.formuladraw.model.ReversePolishNotation;
-import com.smikhlevskiy.formuladraw.model.SelectFormulaItem;
 import com.smikhlevskiy.formuladraw.model.SpinnerItemLines;
 import com.smikhlevskiy.formuladraw.R;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.Message;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
 import android.text.Editable;
@@ -35,7 +31,6 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemSelectedListener;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
@@ -357,37 +352,42 @@ public class MainActivity extends ActionBarActivity {
 		case R.id.saveFormula: {
 
 			ParseUser user = ParseUser.getCurrentUser();
-			if (user != null) {
-
-				final EditText editTextAlertDialog = new EditText(this);
-
-				editTextAlertDialog.setText("UserFunc");
-
-				new AlertDialog.Builder(this)
-
-				.setTitle(getString(R.string.saveFormula)).setMessage(getString(R.string.inputNameFormula))
-						.setView(editTextAlertDialog)
-						.setPositiveButton(getString(R.string.oK), new DialogInterface.OnClickListener() {
-							public void onClick(DialogInterface dialog, int whichButton) {
-
-								formulaDrawController.saveUserFunction(editTextAlertDialog.getText().toString(),
-										editTextFunction.getText().toString());
-
-							}
-
-						})
-
-						.setNegativeButton(getString(R.string.cansel), new DialogInterface.OnClickListener() {
-
-							public void onClick(DialogInterface dialog, int whichButton) {
-
-							}
-
-						})
-
-						.show();
-
+			if (user == null){
+				Message message = mainActivityHandler.obtainMessage();
+				message.what = FDConstants.OUT_TEXT_ERROR_MESSAGE;
+				message.obj = this.getString(R.string.notRegistredUser);
+				mainActivityHandler.sendMessage(message);
+				
+				return true;
 			}
+
+			final EditText editTextAlertDialog = new EditText(this);
+
+			editTextAlertDialog.setText("UserFunc");
+
+			new AlertDialog.Builder(this)
+
+			.setTitle(getString(R.string.saveFormula)).setMessage(getString(R.string.inputNameFormula))
+					.setView(editTextAlertDialog)
+					.setPositiveButton(getString(R.string.oK), new DialogInterface.OnClickListener() {
+						public void onClick(DialogInterface dialog, int whichButton) {
+
+							formulaDrawController.saveUserFunction(editTextAlertDialog.getText().toString(),
+									editTextFunction.getText().toString());
+
+						}
+
+					})
+
+					.setNegativeButton(getString(R.string.cansel), new DialogInterface.OnClickListener() {
+
+						public void onClick(DialogInterface dialog, int whichButton) {
+
+						}
+
+					})
+
+					.show();
 
 			break;
 		}
