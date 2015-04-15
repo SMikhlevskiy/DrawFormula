@@ -20,6 +20,8 @@ import com.smikhlevskiy.formuladraw.util.FDConstants;
 public class FormulaDrawController {
 
 	private String[] formulas = new String[FDConstants.colorSpinnerLines.length];
+	private boolean[] isdYdT = new boolean[FDConstants.colorSpinnerLines.length];
+	
 	private Context context;
 	private Handler outHandler;
 	private SharedPreferences formulaDrawPreferences;
@@ -60,6 +62,7 @@ public class FormulaDrawController {
 		}
 
 		graphicView.setReversePolishNotation(reversePolishNotation);
+		graphicView.setIsdYdT(isdYdT);
 		graphicView.setMinMax(xStart, xEnd);
 		graphicView.setDrawCustomCanvas(true);
 		graphicView.invalidate();
@@ -97,7 +100,10 @@ public class FormulaDrawController {
 	public void saveWorkspace(String xMin, String xMax) {
 		SharedPreferences.Editor editor = formulaDrawPreferences.edit();
 		for (int i = 0; i < FDConstants.colorSpinnerLines.length; i++)
+		{
 			editor.putString(FDConstants.APP_PREFERENCES_TEXTFormula + i, getFormulas(i));
+			editor.putBoolean(FDConstants.APP_PREFERENCES_dYdT + i, getdYdT(i));
+		}	
 
 		editor.putString("xMin", xMin);
 		editor.putString("xMax", xMax);
@@ -126,7 +132,7 @@ public class FormulaDrawController {
 		xMinMaxa[0] = xMin;
 		xMinMaxa[1] = xMax;
 		message.obj = xMinMaxa;
-		outHandler.sendMessage(message);
+		 outHandler.sendMessage(message);
 
 		for (int i = 0; i < FDConstants.colorSpinnerLines.length; i++) {
 			String s = "";
@@ -134,6 +140,7 @@ public class FormulaDrawController {
 				s = "x*x+x";
 
 			setFormulas(formulaDrawPreferences.getString(FDConstants.APP_PREFERENCES_TEXTFormula + i, s), i);
+			setdYdT(formulaDrawPreferences.getBoolean(FDConstants.APP_PREFERENCES_dYdT + i, false), i);
 
 			// formulaDrawController.setFormulas("",i);
 		}
@@ -185,5 +192,14 @@ public class FormulaDrawController {
 	public void setFormulas(String formula, int i) {
 		this.formulas[i] = formula;
 	}
+	
+	public void setdYdT(boolean isdYdT, int i) {
+		this.isdYdT[i] = isdYdT;
+	}
+	public boolean getdYdT(int i) {
+		return this.isdYdT[i];
+	}
+
+
 
 }

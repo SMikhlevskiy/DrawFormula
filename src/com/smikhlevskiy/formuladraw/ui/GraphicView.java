@@ -28,6 +28,7 @@ import android.widget.Toast;
 public class GraphicView extends View {
 
 	private ReversePolishNotation reversePolishNotation[] = null;
+	private boolean[] isdYdT = null;
 	private double xMin = 0.0;
 	private double xMax = 0.0;
 	private double yMin = 0.0;
@@ -69,18 +70,6 @@ public class GraphicView extends View {
 	public GraphicView(Context context, AttributeSet attrs, int defStyle) {
 		super(context, attrs, defStyle);
 
-	}
-
-	public void setReversePolishNotation(ReversePolishNotation[] reversePolishNotation) {
-		this.reversePolishNotation = reversePolishNotation;
-	}
-
-	public Double getxMin() {
-		return xMin;
-	}
-
-	public Double getxMax() {
-		return xMax;
 	}
 
 	/*
@@ -451,4 +440,20 @@ public class GraphicView extends View {
 		return true;
 	}
 
+	public void setReversePolishNotation(ReversePolishNotation[] reversePolishNotation) {
+		this.reversePolishNotation = reversePolishNotation;
+	}
+	
+	public void setIsdYdT(boolean[] isdYdT) {
+		this.isdYdT = isdYdT;
+	}
+
+
+	public Double getxMin() {
+		return xMin;
+	}
+
+	public Double getxMax() {
+		return xMax;
+	}
 }

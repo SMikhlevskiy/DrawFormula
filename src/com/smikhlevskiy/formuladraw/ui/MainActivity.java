@@ -32,6 +32,8 @@ import android.view.View.OnClickListener;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.Button;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -48,7 +50,7 @@ public class MainActivity extends ActionBarActivity {
 	private EditText editTextFunction;
 	private EditText editTextXStart;
 	private EditText editTextXEnd;
-
+	private CheckBox dYdT;
 	private TextView textViewRegUser;
 	private TextView textViewInfoBox;
 	private GraphicView graphicView;
@@ -156,6 +158,8 @@ public class MainActivity extends ActionBarActivity {
 		graphicView.setOutHandler(mainActivityHandler);
 
 		textViewInfoBox = (TextView) findViewById(R.id.textViewInfoBox);
+		
+		dYdT = (CheckBox) findViewById(R.id.dYdT);
 
 		Log.i("Main activity", "Init spinner");
 		// ---------------Spinner Lines---
@@ -174,6 +178,7 @@ public class MainActivity extends ActionBarActivity {
 			public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
 				// TODO Auto-generated method stub
 				editTextFunction.setText(formulaDrawController.getFormulas(position));
+				dYdT.setChecked(formulaDrawController.getdYdT(position));
 				formulaDrawController.setCurrentLine(position);
 			}
 
@@ -202,7 +207,15 @@ public class MainActivity extends ActionBarActivity {
 			public void onTextChanged(CharSequence s, int start, int before, int count) {
 			}
 		});
-		// ----------read preferencrs--------------
+		
+		dYdT.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+
+		       @Override
+		       public void onCheckedChanged(CompoundButton buttonView,boolean isChecked) {
+		    	   formulaDrawController.setdYdT(isChecked, spinnerLine.getSelectedItemPosition());
+		       }
+		   }
+		);     		// ----------read preferencrs--------------
 		Log.i("Main activity", "Read preferces");
 		formulaDrawController.readPreferences();
 
