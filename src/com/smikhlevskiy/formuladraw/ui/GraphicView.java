@@ -287,6 +287,21 @@ public class GraphicView extends View {
 					continue;
 				}
 
+				if (isdYdT[i]) {// dY/dT
+					double y3 = 0;
+					double x3 = sc.getFX(fx + 2);// xMin + 1.0 * (xi + 2.0) *
+													// (xMax
+
+					try {
+						y3 = reversePolishNotation[i].calculation(x3);
+					} catch (ArithmeticException e) {
+						continue;
+					}
+					
+					y1=(y2-y1)/(x2-x1);
+					y2=(y3-y2)/(x3-x2);
+				}
+
 				canvas.drawLine((float) fx, (float) sc.getDpY(y1), (float) (fx + 1.0), (float) sc.getDpY(y2), mPaint);// draw
 				// f(x)
 				// to
@@ -443,11 +458,10 @@ public class GraphicView extends View {
 	public void setReversePolishNotation(ReversePolishNotation[] reversePolishNotation) {
 		this.reversePolishNotation = reversePolishNotation;
 	}
-	
+
 	public void setIsdYdT(boolean[] isdYdT) {
 		this.isdYdT = isdYdT;
 	}
-
 
 	public Double getxMin() {
 		return xMin;
