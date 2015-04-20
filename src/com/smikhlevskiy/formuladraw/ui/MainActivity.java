@@ -94,11 +94,17 @@ public class MainActivity extends ActionBarActivity {
 	 * Draw Graphic On screen
 	 */
 	private void drawGraphic() {
-		if ((editTextXStart.getText().toString().length() > 0) && (editTextXEnd.getText().toString().length() > 0))
-			formulaDrawController.drawGraphic(graphicView, editTextFunction.getText().toString(), new Double(
-					editTextXStart.getText().toString()), new Double(editTextXEnd.getText().toString()));
-		else
+		try {
+
+			if ((editTextXStart.getText().toString().length() > 0) && (editTextXEnd.getText().toString().length() > 0))
+				formulaDrawController.drawGraphic(graphicView, editTextFunction.getText().toString(), new Double(
+						editTextXStart.getText().toString()), new Double(editTextXEnd.getText().toString()));
+			else
+				textViewInfoBox.setText(getString(R.string.errorDiapazon));
+		} catch (Exception e) {
 			textViewInfoBox.setText(getString(R.string.errorDiapazon));
+		}
+
 	}
 
 	@Override
@@ -130,8 +136,8 @@ public class MainActivity extends ActionBarActivity {
 
 					NumberFormat formatter = new DecimalFormat("#0.00");
 
-					editTextXStart.setText(formatter.format(x[0]));
-					editTextXEnd.setText(formatter.format(x[1]));
+					editTextXStart.setText(formatter.format(x[0]).replace(",", "."));
+					editTextXEnd.setText(formatter.format(x[1]).replace(",", "."));
 
 					break;
 
@@ -158,7 +164,7 @@ public class MainActivity extends ActionBarActivity {
 		graphicView.setOutHandler(mainActivityHandler);
 
 		textViewInfoBox = (TextView) findViewById(R.id.textViewInfoBox);
-		
+
 		dYdT = (CheckBox) findViewById(R.id.dYdT);
 
 		Log.i("Main activity", "Init spinner");
@@ -207,17 +213,17 @@ public class MainActivity extends ActionBarActivity {
 			public void onTextChanged(CharSequence s, int start, int before, int count) {
 			}
 		});
-		
+
 		dYdT.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
 
-		       @Override
-		       public void onCheckedChanged(CompoundButton buttonView,boolean isChecked) {
-		    	   formulaDrawController.setdYdT(isChecked, spinnerLine.getSelectedItemPosition());
-		       }
-		   }
-		);     		// ----------read preferencrs--------------
+			@Override
+			public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+				formulaDrawController.setdYdT(isChecked, spinnerLine.getSelectedItemPosition());
+			}
+		}); // ----------read preferencrs--------------
 		Log.i("Main activity", "Read preferces");
-		formulaDrawController.readPreferences();
+		// formulaDrawController.saveNullWorkspace();
+		formulaDrawController.readPreferences();// x*s*
 
 		// editTextFunction.setText(formulaDrawController.getFormulas(spinnerLine.getSelectedItemPosition()));
 		// --------------- Find Root-------------
@@ -301,22 +307,24 @@ public class MainActivity extends ActionBarActivity {
 	/*-------Draw Graphic in On FirstFocus. use because do not have size of view in OnCreate--*/
 	@Override
 	public void onWindowFocusChanged(boolean hasFocus) {
+		Log.i("Main Activity", "onWindowFocusChanged");
+
 		if (prFirstFocus) {
 			drawGraphic();
 
 		}
+
 		prFirstFocus = false;
 		// TODO Auto-generated method stub
 		super.onWindowFocusChanged(hasFocus);
 		// Here you can get the size!
+		Log.i("Main Activity", "Start Ok");
 	}
 
 	@Override
 	protected void onPause() {
 		Log.i("Main Activity", "OnPause");
 		Log.i("Main Activity", "Save Preferences");
-		// Save text formula
-		// formulaDrawController.saveFormula(editTextFunction.getText().toString());
 
 		formulaDrawController.saveWorkspace(editTextXStart.getText().toString(), editTextXEnd.getText().toString());
 
@@ -365,12 +373,12 @@ public class MainActivity extends ActionBarActivity {
 		case R.id.saveFormula: {
 
 			ParseUser user = ParseUser.getCurrentUser();
-			if (user == null){
+			if (user == null) {
 				Message message = mainActivityHandler.obtainMessage();
 				message.what = FDConstants.OUT_TEXT_ERROR_MESSAGE;
 				message.obj = this.getString(R.string.notRegistredUser);
 				mainActivityHandler.sendMessage(message);
-				
+
 				return true;
 			}
 

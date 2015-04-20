@@ -181,6 +181,7 @@ public class GraphicView extends View {
 		yMax = Double.MIN_VALUE;
 		for (int i = 0; i < FDConstants.colorSpinnerLines.length; i++)
 			for (int xi = 0; xi <= this.getWidth(); xi++) {
+				if (reversePolishNotation[i]==null) continue;
 				double x = xMin + 1.0 * xi * (xMax - xMin) / this.getWidth();
 				double y = 0;
 				try {
@@ -214,12 +215,13 @@ public class GraphicView extends View {
 
 	@Override
 	protected void onDraw(Canvas canvas) {
-
+		
+		
 		if (!drawCustomCanvas) {
 			super.onDraw(canvas);
 			return;
 		}
-
+		
 		Paint mPaint = new Paint();
 		// -----Draw background
 		mPaint.setColor(Color.WHITE);
@@ -267,6 +269,9 @@ public class GraphicView extends View {
 
 		mPaint.setStrokeWidth(3);
 		for (int i = 0; i < FDConstants.colorSpinnerLines.length; i++)
+		{
+			if (reversePolishNotation[i]==null) continue;
+		
 			for (double fx = 0; fx < this.getWidth(); fx++) {
 				mPaint.setColor(FDConstants.colorSpinnerLines[i]);
 				double x1 = sc.getFX(fx); // xMin + 1.0 * xi * (xMax - xMin) /
@@ -308,7 +313,7 @@ public class GraphicView extends View {
 				// f(x+1)
 
 			}
-
+		}
 	}
 
 	/**
