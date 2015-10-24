@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/load_listselector"
+    android:orientation="horizontal" >
+
+    <ImageView
+        android:id="@+id/imgView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:layout_marginLeft="5dip"
+        android:layout_marginRight="5dp"
+    	 
+        android:src="@drawable/ic_launcher" />
+
+    <TextView
+        android:id="@+id/txtMainTitle"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="10dip"
+        android:layout_marginRight="5dp"
+        android:layout_toRightOf="@+id/imgView"
+        android:ellipsize="end"
+        android:gravity="left"
+        android:paddingTop="2dp"
+        android:singleLine="true"
+        android:text="mainListItem"
+        android:textColor="@color/white"
+        android:textSize="18sp"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/txtSubTitle"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/txtMainTitle"
+        android:layout_marginLeft="10dip"
+        android:layout_toRightOf="@+id/imgView"
+        android:ellipsize="end"
+        android:gravity="left"
+        android:paddingRight="5dip"
+        android:singleLine="true"
+        android:text="subListItem"
+        android:textColor="@color/black"
+        android:textSize="13sp" />
+
+
+</RelativeLayout>
