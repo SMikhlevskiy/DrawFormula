@@ -3,7 +3,10 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/FormulaDraw.iml" filepath="$PROJECT_DIR$/FormulaDraw.iml" />
-      <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/app/FormulaDraw.app.iml" filepath="$PROJECT_DIR$/.idea/modules/app/FormulaDraw.app.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/app/FormulaDraw.app.androidTest.iml" filepath="$PROJECT_DIR$/.idea/modules/app/FormulaDraw.app.androidTest.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/app/FormulaDraw.app.main.iml" filepath="$PROJECT_DIR$/.idea/modules/app/FormulaDraw.app.main.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/app/FormulaDraw.app.unitTest.iml" filepath="$PROJECT_DIR$/.idea/modules/app/FormulaDraw.app.unitTest.iml" />
     </modules>
   </component>
 </project>

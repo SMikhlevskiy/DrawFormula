@@ -10,8 +10,6 @@ import android.os.Message;
 import android.util.Log;
 import android.widget.Toast;
 
-import com.parse.ParseObject;
-import com.parse.ParseUser;
 import smikhlevskiy.formuladraw.R;
 import smikhlevskiy.formuladraw.model.FormulaDrawBaseData;
 import smikhlevskiy.formuladraw.model.ReversePolishNotation;
@@ -208,12 +206,12 @@ public class FormulaDrawController {
 	 * ------Save Preferences Text formulas
 	 */
 	public void saveUserFunction(String name, String textFunction) {
-		ParseUser user = ParseUser.getCurrentUser();
-		ParseObject post = new ParseObject("UserDatas");
-		post.put("formula", textFunction);
-		post.put("name", name);
-		post.put("user", user);
-		post.saveInBackground();
+//		ParseUser user = ParseUser.getCurrentUser();
+//		ParseObject post = new ParseObject("UserDatas");
+//		post.put("formula", textFunction);
+//		post.put("name", name);
+//		post.put("user", user);
+//		post.saveInBackground();
 	}
 
 	/**

@@ -6,10 +6,12 @@
  */
 package smikhlevskiy.formuladraw.ui;
 
+
+
 import smikhlevskiy.formuladraw.R;
 
 
-import android.support.v7.app.ActionBarActivity;
+
 import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -18,12 +20,10 @@ import android.widget.EditText;
 import android.widget.TableLayout;
 import android.widget.Toast;
 
-import com.parse.LogInCallback;
-import com.parse.ParseException;
-import com.parse.ParseUser;
-import com.parse.SignUpCallback;
+import androidx.appcompat.app.AppCompatActivity;
 
-public class UserRegActivity extends ActionBarActivity {
+
+public class UserRegActivity extends AppCompatActivity {
 	private Button buttonNewUserReg;
 	private Button butNewUserCansel;
 	private Button butNewUserOK;
@@ -53,20 +53,20 @@ public class UserRegActivity extends ActionBarActivity {
 				String login = ((EditText) findViewById(R.id.editText1)).getText().toString();
 				String password = ((EditText) findViewById(R.id.editText2)).getText().toString();
 
-				ParseUser.logInInBackground(login, password, new LogInCallback() {
-					public void done(ParseUser user, ParseException e) {
-						if (user != null) {
-
-							Toast.makeText(getApplicationContext(), getString(R.string.regOK), Toast.LENGTH_LONG)
-									.show();
-							finish();
-						} else {
-							Toast.makeText(getApplicationContext(), getString(R.string.regBad) + e.toString(),
-									Toast.LENGTH_LONG).show();
-						}
-					}
-
-				});
+//				ParseUser.logInInBackground(login, password, new LogInCallback() {
+//					public void done(ParseUser user, ParseException e) {
+//						if (user != null) {
+//
+//							Toast.makeText(getApplicationContext(), getString(R.string.regOK), Toast.LENGTH_LONG)
+//									.show();
+//							finish();
+//						} else {
+//							Toast.makeText(getApplicationContext(), getString(R.string.regBad) + e.toString(),
+//									Toast.LENGTH_LONG).show();
+//						}
+//					}
+//
+//				});
 			}
 
 		});
@@ -108,23 +108,23 @@ public class UserRegActivity extends ActionBarActivity {
 				}
 
 				//
-				ParseUser user = new ParseUser();
-				user.setUsername(usernametxt);
-				user.setPassword(passwordtxt);
-				user.setEmail(emailtxt);
-
-				user.signUpInBackground(new SignUpCallback() {
-					public void done(ParseException e) {
-						if (e == null) {
-
-							Toast.makeText(getApplicationContext(), getString(R.string.newUserRegOK), Toast.LENGTH_LONG)
-									.show();
-						} else {
-							Toast.makeText(getApplicationContext(), getString(R.string.newUserRegBad) + e.toString(),
-									Toast.LENGTH_LONG).show();
-						}
-					}
-				});
+//				ParseUser user = new ParseUser();
+//				user.setUsername(usernametxt);
+//				user.setPassword(passwordtxt);
+//				user.setEmail(emailtxt);
+//
+//				user.signUpInBackground(new SignUpCallback() {
+//					public void done(ParseException e) {
+//						if (e == null) {
+//
+//							Toast.makeText(getApplicationContext(), getString(R.string.newUserRegOK), Toast.LENGTH_LONG)
+//									.show();
+//						} else {
+//							Toast.makeText(getApplicationContext(), getString(R.string.newUserRegBad) + e.toString(),
+//									Toast.LENGTH_LONG).show();
+//						}
+//					}
+//				});
 
 				layoutNewUser.setVisibility(View.INVISIBLE);
 			}

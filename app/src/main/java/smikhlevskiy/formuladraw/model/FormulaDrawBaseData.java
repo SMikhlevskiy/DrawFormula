@@ -5,7 +5,7 @@ package smikhlevskiy.formuladraw.model;
 import android.content.Context;
 import android.content.SharedPreferences;
 
-import com.parse.Parse;
+
 
 public class FormulaDrawBaseData {
 	

@@ -1,20 +1,22 @@
 package smikhlevskiy.formuladraw.ui;
 
+
+
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.util.ArrayList;
 
+import smikhlevskiy.formuladraw.R;
 import smikhlevskiy.formuladraw.ui.UserRegActivity;
 import smikhlevskiy.formuladraw.util.FDConstants;
 
-import com.parse.Parse;
-import com.parse.ParseUser;
+
 
 import smikhlevskiy.formuladraw.adapters.SpinnerLinesAdapter;
 import smikhlevskiy.formuladraw.entity.FormulaDrawController;
 import smikhlevskiy.formuladraw.model.MathUtility;
 import smikhlevskiy.formuladraw.model.SpinnerItemLines;
-import smikhlevskiy.formuladraw.R;
+
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
@@ -23,8 +25,6 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import android.support.v7.app.ActionBar;
-import android.support.v7.app.ActionBarActivity;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -42,7 +42,9 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
-public class MainActivity extends ActionBarActivity {
+import androidx.appcompat.app.AppCompatActivity;
+
+public class MainActivity extends AppCompatActivity {
 
     private Spinner spinnerLine;
     private Button buttonCalck;
@@ -67,12 +69,12 @@ public class MainActivity extends ActionBarActivity {
      * @param typeSelect - AddFunction or LoadFormula
      */
     private void startSelectFormulaActivity(int typeSelect) {
-        if (ParseUser.getCurrentUser() != null) {
-            Intent intent = new Intent(MainActivity.this, SelectFormulaActivity.class);
-            intent.putExtra("typeSelect", typeSelect);
-            startActivityForResult(intent, typeSelect);
-        } else
-            Toast.makeText(MainActivity.this, getString(R.string.pleaseReg), Toast.LENGTH_LONG).show();
+//        if (ParseUser.getCurrentUser() != null) {
+//            Intent intent = new Intent(MainActivity.this, SelectFormulaActivity.class);
+//            intent.putExtra("typeSelect", typeSelect);
+//            startActivityForResult(intent, typeSelect);
+//        } else
+//            Toast.makeText(MainActivity.this, getString(R.string.pleaseReg), Toast.LENGTH_LONG).show();
     }
 
     /**
@@ -204,9 +206,9 @@ public class MainActivity extends ActionBarActivity {
 
         Log.i("Main activity", "Setup Action Bar");
         // --------------ActionBar-----
-        ActionBar bar = getSupportActionBar();
-        bar.setDisplayShowHomeEnabled(true);
-        bar.setIcon(R.drawable.ic_launcher);
+//        ActionBar bar = getSupportActionBar();
+//        bar.setDisplayShowHomeEnabled(true);
+//        bar.setIcon(R.drawable.ic_launcher);
 		/*
 		bar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
         
@@ -282,12 +284,12 @@ public class MainActivity extends ActionBarActivity {
         buttonUserReg.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (ParseUser.getCurrentUser() == null) {
-                    startActivity(new Intent(MainActivity.this, UserRegActivity.class));
-                } else {
-                    ParseUser.logOut();
-                    drawUserInfo();
-                }
+//                if (ParseUser.getCurrentUser() == null) {
+//                    startActivity(new Intent(MainActivity.this, UserRegActivity.class));
+//                } else {
+//                    ParseUser.logOut();
+//                    drawUserInfo();
+//                }
 
             }
 
@@ -368,73 +370,74 @@ public class MainActivity extends ActionBarActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-
-        switch (item.getItemId()) {
-
-            case R.id.loadFormula: {
-                startSelectFormulaActivity(FDConstants.LOAD_FORMULA);
-
-                break;
-            }
-            case R.id.addFunction: {
-                startSelectFormulaActivity(FDConstants.ADD_FUNCTION);
-
-                break;
-            }
-            case R.id.addUserFunction: {
-                startSelectFormulaActivity(FDConstants.ADD_USER_FUNCTION);
-
-                break;
-            }
-
-            case R.id.saveFormula: {
-
-                ParseUser user = ParseUser.getCurrentUser();
-                if (user == null) {
-                    Message message = mainActivityHandler.obtainMessage();
-                    message.what = FDConstants.OUT_TEXT_ERROR_MESSAGE;
-                    message.obj = this.getString(R.string.notRegistredUser);
-                    mainActivityHandler.sendMessage(message);
-
-                    return true;
-                }
-
-                final EditText editTextAlertDialog = new EditText(this);
-
-                editTextAlertDialog.setText("UserFunc");
-
-                new AlertDialog.Builder(this)
-
-                        .setTitle(getString(R.string.saveFormula)).setMessage(getString(R.string.inputNameFormula))
-                        .setView(editTextAlertDialog)
-                        .setPositiveButton(getString(R.string.oK), new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int whichButton) {
-
-                                formulaDrawController.saveUserFunction(editTextAlertDialog.getText().toString(),
-                                        editTextFunction.getText().toString());
-
-                            }
-
-                        })
-
-                        .setNegativeButton(getString(R.string.cansel), new DialogInterface.OnClickListener() {
-
-                            public void onClick(DialogInterface dialog, int whichButton) {
-
-                            }
-
-                        })
-
-                        .show();
-
-                break;
-            }
-            default:
-                break;
-
-        }
-
         return true;
+
+//        switch (item.getItemId()) {
+//
+//            case R.id.loadFormula: {
+//                startSelectFormulaActivity(FDConstants.LOAD_FORMULA);
+//
+//                break;
+//            }
+//            case R.id.addFunction: {
+//                startSelectFormulaActivity(FDConstants.ADD_FUNCTION);
+//
+//                break;
+//            }
+//            case R.id.addUserFunction: {
+//                startSelectFormulaActivity(FDConstants.ADD_USER_FUNCTION);
+//
+//                break;
+//            }
+//
+//            case R.id.saveFormula: {
+//
+////                ParseUser user = ParseUser.getCurrentUser();
+////                if (user == null) {
+////                    Message message = mainActivityHandler.obtainMessage();
+////                    message.what = FDConstants.OUT_TEXT_ERROR_MESSAGE;
+////                    message.obj = this.getString(R.string.notRegistredUser);
+////                    mainActivityHandler.sendMessage(message);
+////
+////                    return true;
+////                }
+//
+//                final EditText editTextAlertDialog = new EditText(this);
+//
+//                editTextAlertDialog.setText("UserFunc");
+//
+//                new AlertDialog.Builder(this)
+//
+//                        .setTitle(getString(R.string.saveFormula)).setMessage(getString(R.string.inputNameFormula))
+//                        .setView(editTextAlertDialog)
+//                        .setPositiveButton(getString(R.string.oK), new DialogInterface.OnClickListener() {
+//                            public void onClick(DialogInterface dialog, int whichButton) {
+//
+//                                formulaDrawController.saveUserFunction(editTextAlertDialog.getText().toString(),
+//                                        editTextFunction.getText().toString());
+//
+//                            }
+//
+//                        })
+//
+//                        .setNegativeButton(getString(R.string.cansel), new DialogInterface.OnClickListener() {
+//
+//                            public void onClick(DialogInterface dialog, int whichButton) {
+//
+//                            }
+//
+//                        })
+//
+//                        .show();
+//
+//                break;
+//            }
+//            default:
+//                break;
+//
+//        }
+//
+//        return true;
     }
 
     @Override
